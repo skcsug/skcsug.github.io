@@ -385,7 +385,8 @@ test('profile photo is larger and high enough resolution', () => {
 test('sidebar links read just GitHub and Resume, avatar matches resume size', () => {
   const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)[1];
   const btns = [...aside.matchAll(/<a class="btn"[^>]*>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-  assert.deepEqual(btns, ['GitHub', 'Resume']);
+  assert.deepEqual(btns, ['GitHub', 'Resume', 'Email']);
+  assert.ok(/<a class="btn" href="mailto:guscks728@naver\.com"/.test(aside), 'Email should be a mailto link');
   const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n');
   const avatar = css.match(/\.avatar\{[^}]*width:(\d+)px/);
   assert.ok(avatar && Number(avatar[1]) >= 120, `avatar should be ~32mm (>=120px), got ${avatar && avatar[1]}`);

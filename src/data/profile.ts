@@ -5,6 +5,7 @@ export const profile = {
   nickname: 'skcsug',
   tagline: '데이터로 결정을 설계하는 분석가',
   github: 'https://github.com/skcsug',
+  email: 'guscks728@naver.com',
   goal: '데이터와 머신러닝으로 경영진의 의사결정을 돕는 데이터 분석가를 목표로 합니다.',
   interests: [
     '문제 정의 — 경영진이 실제로 내려야 하는 결정에서 출발해, 데이터로 답할 질문을 세우는 일',

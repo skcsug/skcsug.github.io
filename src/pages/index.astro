@@ -39,6 +39,7 @@ const githubLabel = profile.github.replace('https://', '');
           {profile.resumeUrl
             ? <a class="btn" href={profile.resumeUrl} download>Resume</a>
             : <span class="btn disabled" aria-disabled="true">Resume (준비 중)</span>}
+          <a class="btn" href={`mailto:${profile.email}`}>Email</a>
         </div>
 
         <h2>관심 분야</h2>
