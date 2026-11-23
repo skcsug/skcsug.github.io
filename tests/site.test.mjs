@@ -127,7 +127,7 @@ test('profile sits in a left sidebar before the projects', () => {
 test('projects are closed toggles showing only the title', () => {
   assert.ok(/<h2[^>]*>Projects<\/h2>/.test(html), 'no "Projects" heading');
   const toggles = [...html.matchAll(/<details([^>]*)>\s*<summary[^>]*>([\s\S]*?)<\/summary>/g)];
-  assert.equal(toggles.length, 2, 'expected 2 project toggles');
+  assert.equal(toggles.length, 3, 'expected 3 project toggles');
   for (const [, attrs, summary] of toggles) {
     assert.ok(!/\bopen\b/.test(attrs), 'toggles should start closed');
     const text = summary.replace(/<[^>]+>/g, '').trim();
@@ -137,7 +137,7 @@ test('projects are closed toggles showing only the title', () => {
 
 test('every project body is 문제 정의 → 역할 → 기술 → 결과 only', () => {
   const bodies = [...html.matchAll(/<\/summary>([\s\S]*?)<\/details>/g)].map((m) => m[1]);
-  assert.equal(bodies.length, 2);
+  assert.equal(bodies.length, 3);
   for (const body of bodies) {
     const heads = [...body.matchAll(/<h4[^>]*>([^<]+)<\/h4>/g)].map((m) => m[1].trim());
     assert.deepEqual(heads, ['문제 정의', '역할', '기술', '결과']);
@@ -227,12 +227,12 @@ test('project titles use the same plain 16px text as Education rows', () => {
 
 test('project toggle titles are the short names', () => {
   const titles = [...html.matchAll(/<summary[^>]*>([\s\S]*?)<\/summary>/g)].map((m) => m[1].replace(/<[^>]+>/g, '').trim());
-  assert.deepEqual(titles, ['IBA ML 회귀 토이 프로젝트', 'OIBC 경진대회']);
+  assert.deepEqual(titles, ['IBA ML 회귀 토이 프로젝트', 'IBA ML 분류 토이 프로젝트', 'OIBC 경진대회']);
 });
 
 test('every project result is bare numbers with no visible labels', () => {
   const bodies = [...html.matchAll(/<\/summary>([\s\S]*?)<\/details>/g)].map((m) => m[1]);
-  assert.equal(bodies.length, 2);
+  assert.equal(bodies.length, 3);
   for (const body of bodies) {
     const result = body.split(/<h4[^>]*>결과<\/h4>/)[1];
     assert.ok(result, 'no 결과 section');
@@ -277,4 +277,13 @@ test('each toggle group closes with its own bottom line', () => {
   assert.ok(/\.toggle-list>?\s*>?\s*\.project:last-child\s*\{[^}]*border-bottom/.test(css), 'no per-group bottom line rule');
   const groups = [...html.matchAll(/<div class="toggle-list">([\s\S]*?)<\/div>\s*(?=<h2|<footer)/g)];
   assert.equal(groups.length, 2, 'Projects and Contest should each have a toggle-list');
+});
+
+test('classification project shows the deck numbers under Projects', () => {
+  const proj = html.slice(html.search(/<h2[^>]*>Projects<\/h2>/), html.search(/<h2[^>]*>Contest<\/h2>/));
+  const body = proj.split('<span class="ptitle">IBA ML 분류 토이 프로젝트')[1];
+  assert.ok(body, 'classification toggle missing under Projects');
+  for (const t of ['800명', '0.6667', '21종', '5 : 1', '81 · 17 · 102', '팀장', '비용행렬']) {
+    assert.ok(body.includes(t), `classification project missing ${t}`);
+  }
 });
