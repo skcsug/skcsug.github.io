@@ -353,3 +353,14 @@ test('resume PDF exists, is linked, and is at most 2 pages', () => {
   const pages = (pdf.match(/\/Type\s*\/Page[^s]/g) || []).length;
   assert.ok(pages >= 1 && pages <= 2, `resume should be 1–2 pages, got ${pages}`);
 });
+
+test('resume intro uses the agreed four lines', () => {
+  const r = readFileSync(join(dist, 'resume', 'index.html'), 'utf8');
+  const intro = [...r.match(/<ul class="intro"[^>]*>([\s\S]*?)<\/ul>/)[1].matchAll(/<li[^>]*>([^<]+)<\/li>/g)].map((m) => m[1]);
+  assert.deepEqual(intro, [
+    '데이터로 결정을 설계하는 분석가를 목표로 합니다.',
+    '데이터 분석에서 멈추지 않고, 경영 의사결정에 바로 쓸 수 있는 제언까지 만듭니다.',
+    '팀장으로 프로젝트를 이끌며 분석 파이프라인과 실험 기준을 설계하고, 기록·문서화를 자동화했습니다.',
+    '금융(대출 심사), 에너지(태양광 발전량), 중고차 가격 등 다양한 도메인의 데이터를 다뤘습니다.',
+  ]);
+});
