@@ -20,81 +20,86 @@ const githubLabel = profile.github.replace('https://', '');
     <meta name="description" content={`${profile.nickname} — ${profile.tagline}. 대표 프로젝트: ${featured.title}`} />
   </head>
   <body>
-    <main class="wrap">
-      <header class="hero">
+    <div class="layout">
+      <aside class="profile">
         <div class="avatar" aria-hidden="true">{profile.nickname[0].toUpperCase()}</div>
-        <div>
-          <h1>{profile.nickname}</h1>
-          <p>{profile.tagline}</p>
-          <div class="buttons">
-            <a class="btn" href={profile.github}>GitHub · {githubLabel}</a>
-            {profile.resumeUrl
-              ? <a class="btn" href={profile.resumeUrl} download>이력서 PDF 받기</a>
-              : <span class="btn disabled" aria-disabled="true">이력서 PDF (준비 중)</span>}
-          </div>
+        <h1>{profile.nickname}</h1>
+        <p class="tagline">{profile.tagline}</p>
+        <div class="buttons">
+          <a class="btn" href={profile.github}>GitHub · {githubLabel}</a>
+          {profile.resumeUrl
+            ? <a class="btn" href={profile.resumeUrl} download>이력서 PDF 받기</a>
+            : <span class="btn disabled" aria-disabled="true">이력서 PDF (준비 중)</span>}
         </div>
-      </header>
 
-      <section>
         <h2>관심 분야</h2>
-        <ul>{profile.interests.map((i) => <li>{i}</li>)}</ul>
+        <ul class="interests">{profile.interests.map((i) => <li>{i}</li>)}</ul>
         <ul class="tags">{profile.stack.map((s) => <li>{s}</li>)}</ul>
-      </section>
+      </aside>
 
-      <section>
-        <h2>대표 프로젝트</h2>
-        <h3>{featured.title}</h3>
-        <p class="meta">{featured.period}</p>
+      <main class="content">
+        <h2>Projects</h2>
 
-        <h4>문제 정의</h4>
-        <p>{featured.problem}</p>
+        <details class="project" open>
+          <summary>
+            <span class="badge">대표</span>
+            <span class="ptitle">{featured.title}</span>
+            <span class="meta">{featured.period}</span>
+          </summary>
+          <div class="body">
+            <h4>문제 정의</h4>
+            <p>{featured.problem}</p>
 
-        <h4>역할</h4>
-        <ul>{featured.role.map((r) => <li>{r}</li>)}</ul>
+            <h4>역할</h4>
+            <ul>{featured.role.map((r) => <li>{r}</li>)}</ul>
 
-        <h4>기술</h4>
-        <ul>{featured.tech.map((t) => <li>{t}</li>)}</ul>
+            <h4>기술</h4>
+            <ul>{featured.tech.map((t) => <li>{t}</li>)}</ul>
 
-        <h4>결과</h4>
-        <p>{featured.result}</p>
-        <div class="stats">
-          <div class="stat"><span>첫 제출 Public RMSE</span><b>{fmt(first.rmse)}</b></div>
-          <div class="stat best"><span>최종 선택 #{final.n} Public RMSE</span><b>{fmt(final.rmse)}</b></div>
-          <div class="stat"><span>개선 폭</span><b>−{gain}%</b></div>
-        </div>
-        <RmseChart points={featured.rmse} finalN={featured.finalN} />
-        <p>{featured.lesson}</p>
+            <h4>결과</h4>
+            <p>{featured.result}</p>
+            <div class="stats">
+              <div class="stat"><span>첫 제출 Public RMSE</span><b>{fmt(first.rmse)}</b></div>
+              <div class="stat best"><span>최종 선택 #{final.n} Public RMSE</span><b>{fmt(final.rmse)}</b></div>
+              <div class="stat"><span>개선 폭</span><b>−{gain}%</b></div>
+            </div>
+            <RmseChart points={featured.rmse} finalN={featured.finalN} />
+            <p>{featured.lesson}</p>
 
-        <div class="figures">
-          {featured.figures.map((f) => (
-            <figure>
-              <img src={f.src} alt={f.caption} loading="lazy" width="2200" height="1240" />
-              <figcaption>{f.caption}</figcaption>
-            </figure>
-          ))}
-        </div>
+            <div class="figures">
+              {featured.figures.map((f) => (
+                <figure>
+                  <img src={f.src} alt={f.caption} loading="lazy" width="2200" height="1240" />
+                  <figcaption>{f.caption}</figcaption>
+                </figure>
+              ))}
+            </div>
 
-        <h4>링크</h4>
-        <dl class="links">
-          <dt>데모</dt><dd>{featured.demo ? <a href={featured.demo}>{featured.demo}</a> : '없음 (대회 제출용 모델)'}</dd>
-          <dt>소스 코드</dt><dd>{featured.source}</dd>
-        </dl>
-      </section>
+            <h4>링크</h4>
+            <dl class="links">
+              <dt>데모</dt><dd>{featured.demo ? <a href={featured.demo}>{featured.demo}</a> : '없음 (대회 제출용 모델)'}</dd>
+              <dt>소스 코드</dt><dd>{featured.source}</dd>
+            </dl>
+          </div>
+        </details>
 
-      <section>
-        <h2>다른 프로젝트</h2>
         {others.map((o) => (
-          <article class="card">
-            <h3>{o.title}</h3>
-            <p>{o.summary}</p>
-            <ul class="tags">{o.tags.map((t) => <li>{t}</li>)}</ul>
-          </article>
+          <details class="project">
+            <summary>
+              <span class="ptitle">{o.title}</span>
+              <span class="meta">{o.tags.join(' · ')}</span>
+            </summary>
+            <div class="body">
+              <p>{o.summary}</p>
+              <ul class="tags">{o.tags.map((t) => <li>{t}</li>)}</ul>
+            </div>
+          </details>
         ))}
-      </section>
 
-      <footer>
-        <a href={profile.github}>{githubLabel}</a> · Built with Astro · Hosted on GitHub Pages
-      </footer>
-    </main>
+        <footer>
+          <a href={profile.github}>{githubLabel}</a> · Built with Astro · Hosted on GitHub Pages
+        </footer>
+      </main>
+    </div>
   </body>
 </html>

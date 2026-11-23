@@ -117,3 +117,18 @@ test('images and svg are constrained to container width', () => {
     + [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]).join('\n');
   assert.ok(/(img|svg)[^{]*\{[^}]*max-width:\s*100%/.test(css), 'no max-width:100% rule for img/svg');
 });
+
+test('profile sits in a left sidebar before the projects', () => {
+  const aside = html.match(/<aside[^>]*class="[^"]*profile[^"]*"[^>]*>([\s\S]*?)<\/aside>/);
+  assert.ok(aside, 'no <aside class="profile">');
+  for (const s of ['skcsug', 'github.com/skcsug', '관심 분야']) assert.ok(aside[1].includes(s), `sidebar missing ${s}`);
+  assert.ok(html.indexOf('<aside') < html.indexOf('Projects'), 'sidebar should come before Projects');
+});
+
+test('projects are toggles under a Projects heading, featured open', () => {
+  assert.ok(/<h2[^>]*>Projects<\/h2>/.test(html), 'no "Projects" heading');
+  const toggles = [...html.matchAll(/<details([^>]*)>\s*<summary/g)];
+  assert.equal(toggles.length, 3, 'expected 3 project toggles');
+  assert.ok(/\bopen\b/.test(toggles[0][1]), 'featured project toggle should start open');
+  assert.ok(!/\bopen\b/.test(toggles[1][1]) && !/\bopen\b/.test(toggles[2][1]), 'other toggles should start closed');
+});
