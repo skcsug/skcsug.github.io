@@ -172,3 +172,12 @@ test('Education uses the bulleted degree · school (date) row style', () => {
   assert.ok(/<li[^>]*>[\s\S]*B\.S\., Computer Science &amp; Engineering[\s\S]*Pusan National University \(<em[^>]*>2026 ~<\/em>\)/.test(sec),
     'row should read "B.S., Computer Science & Engineering  Pusan National University (2026 ~)" with italic date');
 });
+
+test('Activities uses the Education row style with only name, group and date', () => {
+  const sec = html.match(/<h2[^>]*>Activities<\/h2>([\s\S]*?)<\/section>/)[1];
+  assert.ok(/<ul class="edu"/.test(sec), 'Activities should reuse the <ul class="edu"> row style');
+  assert.ok(/Intelligent Business Analytics \(IBA\)[\s\S]*지능형 경영 분석 학회 · 12th Cohort Member \(<em[^>]*>2026\.08 ~<\/em>\)/.test(sec),
+    'row should read "Intelligent Business Analytics (IBA)  지능형 경영 분석 학회 · 12th Cohort Member (2026.08 ~)"');
+  assert.ok(!sec.includes('Pusan National University'), 'university should be dropped from Activities');
+  assert.ok(!sec.includes('팀 리드') && !sec.includes('교육 세션'), 'detail bullets should be removed');
+});

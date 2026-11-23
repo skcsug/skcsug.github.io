@@ -55,16 +55,14 @@ const githubLabel = profile.github.replace('https://', '');
 
         <section class="block">
           <h2>Activities</h2>
-          {activities.map((a) => (
-            <div class="entry">
-              <div class="entry-head">
-                <span class="entry-title">{a.name}</span>
-                <span class="meta">{a.period}</span>
-              </div>
-              <p class="entry-sub">{a.sub}</p>
-              <ul class="entry-points">{a.points.map((p) => <li>{p}</li>)}</ul>
-            </div>
-          ))}
+          <ul class="edu">
+            {activities.map((a) => (
+              <li>
+                <span class="edu-degree">{a.name}</span>
+                <span class="edu-school">{a.sub} (<em>{a.period}</em>)</span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <h2>Projects</h2>

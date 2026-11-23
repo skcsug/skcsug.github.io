@@ -63,14 +63,8 @@ h2 { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: 
 h4 { font-size: 17px; margin: 28px 0 6px; }
 .meta { color: var(--muted); font-size: 14px; }
 
-/* Education / Activities 항목 */
+/* Education / Activities 공통 */
 .block { margin-bottom: 36px; }
-.entry { padding: 14px 0; border-bottom: 1px solid var(--line); }
-.entry:first-of-type { border-top: 1px solid var(--line); }
-.entry-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; }
-.entry-title { font-size: 17px; font-weight: 700; }
-.entry-sub { margin: 2px 0 0; color: var(--muted); }
-.entry-points { margin: 6px 0 0; font-size: 15px; }
 
 /* Education: 글머리 기호 + "학위, 전공   학교 (기간)" 한 줄, 줄마다 밑줄 */
 .edu { padding-left: 22px; margin: 0; }

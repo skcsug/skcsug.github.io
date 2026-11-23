@@ -21,15 +21,7 @@ export const education = [
 ];
 
 export const activities = [
-  {
-    name: 'Intelligent Business Analytics (IBA)',
-    period: '2026.08 ~',
-    sub: '지능형 경영 분석 학회 · Pusan National University · 12th Cohort Member',
-    points: [
-      '데이터 분석·머신러닝 교육 세션과 팀 프로젝트 참여',
-      '영국 중고차 가격 예측 회귀 대회 팀 리드 (Public RMSE 2,010.31)',
-    ],
-  },
+  { name: 'Intelligent Business Analytics (IBA)', sub: '지능형 경영 분석 학회 · 12th Cohort Member', period: '2026.08 ~' },
 ];
 
 export const featured = {
