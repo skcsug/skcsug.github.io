@@ -132,3 +132,9 @@ test('projects are toggles under a Projects heading, featured open', () => {
   assert.ok(/\bopen\b/.test(toggles[0][1]), 'featured project toggle should start open');
   assert.ok(!/\bopen\b/.test(toggles[1][1]) && !/\bopen\b/.test(toggles[2][1]), 'other toggles should start closed');
 });
+
+test('interests describe the decision-support analyst goal', () => {
+  const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)[1];
+  assert.ok(aside.includes('경영진의 의사결정을 돕는 데이터 분석가'), 'sidebar missing career goal sentence');
+  assert.ok(!aside.includes('대회형 실험 운영'), 'old project-centric interest still present');
+});
