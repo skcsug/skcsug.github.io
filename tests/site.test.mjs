@@ -248,3 +248,11 @@ test('IBA result tiles show the verified leaderboard numbers', () => {
   const body = html.split('<span class="ptitle">IBA ML 회귀 토이 프로젝트')[1].split('</details>')[0];
   for (const t of ['2,010.31', '2,122.44', '−5.3%', '0.9563', '31회']) assert.ok(body.includes(t), `IBA missing ${t}`);
 });
+
+test('footer has no divider line above it', () => {
+  const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n')
+    + [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]).join('\n');
+  const rule = css.match(/(?:^|[}\s])footer\s*\{([^}]*)\}/);
+  assert.ok(rule, 'no footer rule');
+  assert.ok(!/border-top/.test(rule[1]), 'footer still draws a top border');
+});
