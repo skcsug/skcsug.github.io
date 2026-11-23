@@ -1,0 +1,100 @@
+---
+import '../styles/global.css';
+import RmseChart from '../components/RmseChart.astro';
+import { profile, featured, others } from '../data/profile';
+
+const fmt = (v: number) => v.toLocaleString('en-US', { minimumFractionDigits: 2 });
+const first = featured.rmse[0];
+const final = featured.rmse.find((p) => p.n === featured.finalN)!;
+const gain = (((first.rmse - final.rmse) / first.rmse) * 100).toFixed(1);
+const githubLabel = profile.github.replace('https://', '');
+---
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <title>{profile.nickname} · 포트폴리오</title>
+    <meta name="description" content={`${profile.nickname} — ${profile.tagline}. 대표 프로젝트: ${featured.title}`} />
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="hero">
+        <div class="avatar" aria-hidden="true">{profile.nickname[0].toUpperCase()}</div>
+        <div>
+          <h1>{profile.nickname}</h1>
+          <p>{profile.tagline}</p>
+          <div class="buttons">
+            <a class="btn" href={profile.github}>GitHub · {githubLabel}</a>
+            {profile.resumeUrl
+              ? <a class="btn" href={profile.resumeUrl} download>이력서 PDF 받기</a>
+              : <span class="btn disabled" aria-disabled="true">이력서 PDF (준비 중)</span>}
+          </div>
+        </div>
+      </header>
+
+      <section>
+        <h2>관심 분야</h2>
+        <ul>{profile.interests.map((i) => <li>{i}</li>)}</ul>
+        <ul class="tags">{profile.stack.map((s) => <li>{s}</li>)}</ul>
+      </section>
+
+      <section>
+        <h2>대표 프로젝트</h2>
+        <h3>{featured.title}</h3>
+        <p class="meta">{featured.period}</p>
+
+        <h4>문제 정의</h4>
+        <p>{featured.problem}</p>
+
+        <h4>역할</h4>
+        <ul>{featured.role.map((r) => <li>{r}</li>)}</ul>
+
+        <h4>기술</h4>
+        <ul>{featured.tech.map((t) => <li>{t}</li>)}</ul>
+
+        <h4>결과</h4>
+        <p>{featured.result}</p>
+        <div class="stats">
+          <div class="stat"><span>첫 제출 Public RMSE</span><b>{fmt(first.rmse)}</b></div>
+          <div class="stat best"><span>최종 선택 #{final.n} Public RMSE</span><b>{fmt(final.rmse)}</b></div>
+          <div class="stat"><span>개선 폭</span><b>−{gain}%</b></div>
+        </div>
+        <RmseChart points={featured.rmse} finalN={featured.finalN} />
+        <p>{featured.lesson}</p>
+
+        <div class="figures">
+          {featured.figures.map((f) => (
+            <figure>
+              <img src={f.src} alt={f.caption} loading="lazy" width="2200" height="1240" />
+              <figcaption>{f.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+
+        <h4>링크</h4>
+        <dl class="links">
+          <dt>데모</dt><dd>{featured.demo ? <a href={featured.demo}>{featured.demo}</a> : '없음 (대회 제출용 모델)'}</dd>
+          <dt>소스 코드</dt><dd>{featured.source}</dd>
+        </dl>
+      </section>
+
+      <section>
+        <h2>다른 프로젝트</h2>
+        {others.map((o) => (
+          <article class="card">
+            <h3>{o.title}</h3>
+            <p>{o.summary}</p>
+            <ul class="tags">{o.tags.map((t) => <li>{t}</li>)}</ul>
+          </article>
+        ))}
+      </section>
+
+      <footer>
+        <a href={profile.github}>{githubLabel}</a> · Built with Astro · Hosted on GitHub Pages
+      </footer>
+    </main>
+  </body>
+</html>

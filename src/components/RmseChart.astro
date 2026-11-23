@@ -1,0 +1,44 @@
+---
+// 제출 번호별 Public RMSE를 선 그래프(SVG)로 그립니다. 외부 라이브러리 없이 빌드할 때 좌표를 계산합니다.
+interface Props {
+  points: { n: number; rmse: number }[];
+  finalN: number;
+}
+const { points, finalN } = Astro.props;
+
+const W = 640, H = 240;
+const pad = { l: 72, r: 16, t: 34, b: 60 };
+const ys = points.map((p) => p.rmse);
+const yMin = Math.floor((Math.min(...ys) - 10) / 20) * 20;
+const yMax = Math.ceil((Math.max(...ys) + 10) / 20) * 20;
+const xMin = points[0].n, xMax = points[points.length - 1].n;
+
+const x = (n: number) => pad.l + ((n - xMin) / (xMax - xMin)) * (W - pad.l - pad.r);
+const y = (v: number) => pad.t + ((yMax - v) / (yMax - yMin)) * (H - pad.t - pad.b);
+
+const line = points.map((p) => `${x(p.n).toFixed(1)},${y(p.rmse).toFixed(1)}`).join(' ');
+const ticks: number[] = [];
+for (let v = yMin; v <= yMax; v += 40) ticks.push(v);
+const first = points[0];
+const final = points.find((p) => p.n === finalN)!;
+const fmt = (v: number) => v.toLocaleString('en-US', { minimumFractionDigits: 2 });
+---
+<figure class="chart">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`기록된 제출 ${points.length}건의 Public RMSE 변화: ${fmt(first.rmse)}에서 ${fmt(final.rmse)}`}>
+    {ticks.map((v) => (
+      <g>
+        <line x1={pad.l} x2={W - pad.r} y1={y(v)} y2={y(v)} class="grid" />
+        <text x={pad.l - 8} y={y(v) + 4} text-anchor="end" class="tick">{v.toLocaleString('en-US')}</text>
+      </g>
+    ))}
+    <text x={pad.l} y={H - 8} class="tick">#{xMin}</text>
+    <text x={W - pad.r} y={H - 8} text-anchor="end" class="tick">#{xMax}</text>
+    <text x={(pad.l + W - pad.r) / 2} y={H - 8} text-anchor="middle" class="tick">제출 번호</text>
+    <polyline points={line} class="line" />
+    {points.map((p) => <circle cx={x(p.n)} cy={y(p.rmse)} r="2.5" class="dot" />)}
+    <circle cx={x(final.n)} cy={y(final.rmse)} r="6" class="final" />
+    <text x={x(final.n)} y={y(final.rmse) + 22} text-anchor="middle" class="label">최종 선택 #{final.n} · {fmt(final.rmse)}</text>
+    <text x={x(first.n) - 4} y={pad.t - 12} class="label">첫 제출 {fmt(first.rmse)}</text>
+  </svg>
+  <figcaption>제출 번호별 Public RMSE (낮을수록 좋음)</figcaption>
+</figure>
