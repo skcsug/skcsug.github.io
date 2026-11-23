@@ -189,3 +189,15 @@ test('no pill-shaped chips anywhere', () => {
   const tagRule = css.match(/\.tags li\s*\{([^}]*)\}/);
   assert.ok(tagRule && !/border:|background:/.test(tagRule[1]), '.tags li should have no border/background');
 });
+
+test('no rounded boxes anywhere except the round avatar', () => {
+  const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n')
+    + [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]).join('\n');
+  const radii = [...css.matchAll(/([^{}]+)\{[^}]*border-radius:\s*([^;}]+)/g)].map((m) => [m[1].trim(), m[2].trim()]);
+  const bad = radii.filter(([sel, v]) => !(sel.includes('.avatar') && v === '50%'));
+  assert.deepEqual(bad, [], `rounded boxes remain: ${JSON.stringify(bad)}`);
+  for (const sel of ['.btn', '.stat', '.project']) {
+    const rule = css.match(new RegExp(sel.replace('.', '\\.') + '\\s*\\{([^}]*)\\}'));
+    assert.ok(rule && !/(^|;)\s*border:\s*1px/.test(rule[1]) && !/background:\s*var\(--soft\)/.test(rule[1]), `${sel} still drawn as a box`);
+  }
+});

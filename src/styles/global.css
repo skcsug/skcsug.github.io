@@ -44,20 +44,19 @@ a:hover { text-decoration: underline; }
 }
 .profile h1 { margin: 14px 0 0; font-size: 28px; line-height: 1.2; letter-spacing: -0.01em; }
 .tagline { margin: 4px 0 14px; color: var(--muted); }
-.buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+.buttons { display: flex; gap: 4px 16px; flex-wrap: wrap; }
 .profile .buttons { flex-direction: column; align-items: flex-start; }
 .profile h2 { margin-top: 28px; }
 .goal { margin: 0 0 8px; font-size: 15px; font-weight: 600; line-height: 1.6; }
 .interests { font-size: 14px; line-height: 1.6; }
 .interests li { margin: 6px 0; }
 .btn {
-  display: inline-block; padding: 6px 14px; border-radius: 6px;
-  border: 1px solid var(--line); background: var(--soft);
-  color: var(--text); font-size: 14px; line-height: 1.5;
+  display: inline-block; padding: 0;
+  color: var(--accent); font-size: 14px; line-height: 1.6;
 }
-.btn:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
-.btn.disabled { color: var(--muted); cursor: not-allowed; border-style: dashed; background: transparent; }
-.btn.disabled:hover { border-color: var(--line); color: var(--muted); }
+.btn:hover { text-decoration: underline; }
+.btn.disabled { color: var(--muted); cursor: default; }
+.btn.disabled:hover { text-decoration: none; }
 
 h2 { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; font-weight: 600; }
 h4 { font-size: 17px; margin: 28px 0 6px; }
@@ -74,25 +73,25 @@ h4 { font-size: 17px; margin: 28px 0 6px; }
 .edu-school { display: inline-block; }
 
 /* 프로젝트 토글 */
-.project { border: 1px solid var(--line); border-radius: 10px; margin: 0 0 14px; background: var(--bg); }
+.project { border-top: 1px solid var(--line); margin: 0; }
+.project:last-of-type { border-bottom: 1px solid var(--line); }
 .project summary {
   list-style: none; cursor: pointer; position: relative;
-  padding: 16px 48px 16px 20px;
+  padding: 16px 40px 16px 0;
   display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px;
 }
 .project summary::-webkit-details-marker { display: none; }
 .project summary::after {
-  content: '+'; position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+  content: '+'; position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
   font-size: 22px; line-height: 1; color: var(--muted);
 }
 .project[open] > summary::after { content: '−'; }
-.project[open] > summary { border-bottom: 1px solid var(--line); }
 .project summary:hover .ptitle { color: var(--accent); }
-.project summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 10px; }
+.project summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .ptitle { font-size: 19px; font-weight: 700; line-height: 1.4; }
 .project summary .meta { flex-basis: 100%; }
 .badge { font-size: 13px; font-weight: 600; color: var(--accent); }
-.body { padding: 4px 20px 20px; }
+.body { padding: 0 0 24px; }
 .body > h4:first-child { margin-top: 16px; }
 .body > p:first-child { margin-top: 14px; }
 ul { padding-left: 20px; margin: 6px 0; }
@@ -104,16 +103,14 @@ li { margin: 2px 0; }
 
 /* 결과 */
 .stats { display: flex; gap: 12px; flex-wrap: wrap; margin: 12px 0; }
-.stat { flex: 1 1 96px; border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; }
+.stat { flex: 1 1 96px; padding: 4px 0; display: flex; flex-direction: column; justify-content: space-between; }
 .stat b { display: block; font-size: 22px; line-height: 1.3; font-variant-numeric: tabular-nums; }
 .stat span { font-size: 13px; color: var(--muted); }
 .stat.best b { color: var(--accent); }
 
 figure { margin: 18px 0; }
 figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
-.figures img { border: 1px solid var(--line); border-radius: 6px; }
 
-.chart svg { border: 1px solid var(--line); border-radius: 6px; background: #fff; }
 .chart .grid { stroke: var(--line); stroke-width: 1; }
 .chart .tick { fill: var(--muted); font-size: 12px; }
 .chart .line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; }
@@ -137,11 +134,11 @@ footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line);
   .layout { padding: 28px 16px 32px; }
   .avatar { width: 64px; height: 64px; font-size: 26px; }
   .profile h1 { font-size: 26px; }
-  .project summary { padding: 14px 40px 14px 14px; }
-  .project summary::after { right: 14px; }
+  .project summary { padding: 14px 32px 14px 0; }
+  .project summary::after { right: 4px; }
   .ptitle { font-size: 17px; }
-  .body { padding: 4px 14px 16px; }
-  .stat { padding: 8px 10px; }
+  .body { padding: 0 0 20px; }
+  .stat { padding: 4px 0; }
   .stat b { font-size: 18px; }
   .stat span { font-size: 12px; }
   /* 휴대폰에서는 그래프가 약 0.54배로 줄어들므로 SVG 안 글자를 키웁니다 */
