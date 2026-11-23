@@ -381,3 +381,12 @@ test('profile photo is larger and high enough resolution', () => {
   const photo = r.match(/\.photo[^{,]*\{[^}]*width:\s*(\d+)mm/);
   assert.ok(photo && Number(photo[1]) >= 32, `resume photo should be >= 32mm, got ${photo && photo[1]}`);
 });
+
+test('sidebar links read just GitHub and Resume, avatar matches resume size', () => {
+  const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)[1];
+  const btns = [...aside.matchAll(/<a class="btn"[^>]*>([^<]+)<\/a>/g)].map((m) => m[1].trim());
+  assert.deepEqual(btns, ['GitHub', 'Resume']);
+  const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n');
+  const avatar = css.match(/\.avatar\{[^}]*width:(\d+)px/);
+  assert.ok(avatar && Number(avatar[1]) >= 120, `avatar should be ~32mm (>=120px), got ${avatar && avatar[1]}`);
+});

@@ -31,14 +31,14 @@ const githubLabel = profile.github.replace('https://', '');
   <body>
     <div class="layout">
       <aside class="profile">
-        <div class="avatar"><img src="/profile.jpg" alt={`${profile.nickname} 프로필 사진`} width="108" height="108" /></div>
+        <div class="avatar"><img src="/profile.jpg" alt={`${profile.nickname} 프로필 사진`} width="120" height="120" /></div>
         <h1>{profile.nickname}</h1>
         <p class="tagline">{profile.tagline}</p>
         <div class="buttons">
-          <a class="btn" href={profile.github}>GitHub · {githubLabel}</a>
+          <a class="btn" href={profile.github}>GitHub</a>
           {profile.resumeUrl
-            ? <a class="btn" href={profile.resumeUrl} download>이력서 PDF 받기</a>
-            : <span class="btn disabled" aria-disabled="true">이력서 PDF (준비 중)</span>}
+            ? <a class="btn" href={profile.resumeUrl} download>Resume</a>
+            : <span class="btn disabled" aria-disabled="true">Resume (준비 중)</span>}
         </div>
 
         <h2>관심 분야</h2>
