@@ -3,13 +3,13 @@
 
 export const profile = {
   nickname: 'skcsug',
-  tagline: '데이터·머신러닝을 공부하는 학생',
+  tagline: '의사결정을 돕는 데이터 분석가 지망생',
   github: 'https://github.com/skcsug',
   goal: '데이터와 머신러닝으로 경영진의 의사결정을 돕는 데이터 분석가를 목표로 합니다.',
   interests: [
     '문제 정의 — 경영진이 실제로 내려야 하는 결정에서 출발해, 데이터로 답할 질문을 세우는 일',
     '예측과 분석 — 머신러닝 예측과 통계 분석으로 선택지별 결과와 위험을 숫자로 보여주는 일',
-    '전달과 제안 — 분석 결과를 시각화와 짧은 메시지로 정리해 "그래서 무엇을 하면 좋은가"까지 조언하는 일',
+    '전달과 제안 — 분석 결과를 시각화·요약하여 다음 의사결정에 관해 조언하는 일',
   ],
   stack: ['Python', 'pandas', 'scikit-learn', 'LightGBM', 'XGBoost', 'CatBoost', 'matplotlib', 'Git / GitHub'],
   // 이력서 PDF를 public/resume.pdf에 넣은 뒤 '/resume.pdf'로 바꾸면 버튼이 켜집니다.
