@@ -127,7 +127,7 @@ test('profile sits in a left sidebar before the projects', () => {
 test('projects are closed toggles showing only the title', () => {
   assert.ok(/<h2[^>]*>Projects<\/h2>/.test(html), 'no "Projects" heading');
   const toggles = [...html.matchAll(/<details([^>]*)>\s*<summary[^>]*>([\s\S]*?)<\/summary>/g)];
-  assert.equal(toggles.length, 3, 'expected 3 project toggles');
+  assert.equal(toggles.length, 2, 'expected 2 project toggles');
   for (const [, attrs, summary] of toggles) {
     assert.ok(!/\bopen\b/.test(attrs), 'toggles should start closed');
     const text = summary.replace(/<[^>]+>/g, '').trim();
@@ -137,7 +137,7 @@ test('projects are closed toggles showing only the title', () => {
 
 test('every project body is 문제 정의 → 역할 → 기술 → 결과 only', () => {
   const bodies = [...html.matchAll(/<\/summary>([\s\S]*?)<\/details>/g)].map((m) => m[1]);
-  assert.equal(bodies.length, 3);
+  assert.equal(bodies.length, 2);
   for (const body of bodies) {
     const heads = [...body.matchAll(/<h4[^>]*>([^<]+)<\/h4>/g)].map((m) => m[1].trim());
     assert.deepEqual(heads, ['문제 정의', '역할', '기술', '결과']);
@@ -227,12 +227,12 @@ test('project titles use the same plain 16px text as Education rows', () => {
 
 test('project toggle titles are the short names', () => {
   const titles = [...html.matchAll(/<summary[^>]*>([\s\S]*?)<\/summary>/g)].map((m) => m[1].replace(/<[^>]+>/g, '').trim());
-  assert.deepEqual(titles, ['IBA ML 회귀 토이 프로젝트', 'OIBC 경진대회', '뜰까말까']);
+  assert.deepEqual(titles, ['IBA ML 회귀 토이 프로젝트', 'OIBC 경진대회']);
 });
 
 test('every project result is number tiles only', () => {
   const bodies = [...html.matchAll(/<\/summary>([\s\S]*?)<\/details>/g)].map((m) => m[1]);
-  assert.equal(bodies.length, 3);
+  assert.equal(bodies.length, 2);
   for (const body of bodies) {
     const result = body.split(/<h4[^>]*>결과<\/h4>/)[1];
     assert.ok(result, 'no 결과 section');
