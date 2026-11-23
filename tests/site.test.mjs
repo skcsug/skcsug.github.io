@@ -336,3 +336,20 @@ test('tab icon is the custom S icon, not the Astro default', () => {
   const png = html.match(/<link[^>]+rel="(?:icon|apple-touch-icon)"[^>]+href="(\/[^"]+\.png)"/);
   assert.ok(png && existsSync(join(dist, png[1])), 'png icon fallback missing');
 });
+
+test('resume page has the reference sections and verified numbers', () => {
+  const r = readFileSync(join(dist, 'resume', 'index.html'), 'utf8');
+  for (const t of ['정현찬', '데이터 분석가', 'guscks728@naver.com', 'skcsug.github.io',
+    '부산대학교 정보컴퓨터공학부 컴퓨터공학전공', '2028.08', '전남대학교 소프트웨어공학과', '4.06/4.5', '980/990',
+    'OIBC', '385팀 중 78위', '+2,394만 원', '0.6667', '2,010.31', '| 문제', '| 결과', '| 주요 작업', '학력, 활동, 어학']) {
+    assert.ok(r.includes(t.replace('&', '&amp;')), `resume missing ${t}`);
+  }
+  assert.ok(!/010-\d{3,4}-\d{4}/.test(r), 'phone number must not be published');
+});
+
+test('resume PDF exists, is linked, and is at most 2 pages', () => {
+  assert.ok(/href="\/resume\.pdf"/.test(html), 'resume button should link to /resume.pdf');
+  const pdf = readFileSync(join(dist, 'resume.pdf')).toString('latin1');
+  const pages = (pdf.match(/\/Type\s*\/Page[^s]/g) || []).length;
+  assert.ok(pages >= 1 && pages <= 2, `resume should be 1–2 pages, got ${pages}`);
+});

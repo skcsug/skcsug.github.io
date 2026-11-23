@@ -13,7 +13,7 @@ export const profile = {
   ],
   skills: ['Python', 'ML', 'C/C++', 'CSS/HTML/JavaScript'],
   // 이력서 PDF를 public/resume.pdf에 넣은 뒤 '/resume.pdf'로 바꾸면 버튼이 켜집니다.
-  resumeUrl: null as string | null,
+  resumeUrl: '/resume.pdf' as string | null,
 };
 
 export const education = [
