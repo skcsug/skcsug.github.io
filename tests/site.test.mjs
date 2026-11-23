@@ -52,7 +52,7 @@ test('RMSE chart plots all 27 submissions', () => {
 });
 
 // 팀원 이름은 저장소에 평문으로 남기지 않으려고 SHA-256 해시로만 보관합니다. [글자 수, 해시]
-const FORBIDDEN = [[2,"08e8d86e6b074d1bc438460eed54a694306f211fe17bd130dbf432f23db8fefd"],[2,"5cf945b0f75f08f5f5d52448b4c2698310545de38ae177500b741b9cc69edc04"],[4,"6c5d0db00d8984439ad05b670808324300ce97c5f273c5016e2002153d69bbb3"],[5,"982c99bacfb7c475a80cdc7236b75e4080752db5494392a3135f2c288b941e0d"],[5,"cc5953191f316aee20130656f066831e8ff60ae58a0bd4bfbbba2909d9239c71"],[3,"5ba2455c833d6ed3c0aac55d0582d5f7a60c83596bd2136ece9d4c82ec275a65"],[3,"93d0b5f665a83a08d3a932b40d95a1ad86b24e212e84fe0e25a5c0270712f88c"],[3,"66d94387569600795c8bd852d6a7e4c3301d58ebff92f47a18eaa75f94401ce2"],[3,"50db583bc523875bbfcaa5aee000e648976b4224a91e9caaf7d26da3f8635500"]];
+const FORBIDDEN = [[2,"08e8d86e6b074d1bc438460eed54a694306f211fe17bd130dbf432f23db8fefd"],[2,"5cf945b0f75f08f5f5d52448b4c2698310545de38ae177500b741b9cc69edc04"],[4,"6c5d0db00d8984439ad05b670808324300ce97c5f273c5016e2002153d69bbb3"],[5,"982c99bacfb7c475a80cdc7236b75e4080752db5494392a3135f2c288b941e0d"],[5,"cc5953191f316aee20130656f066831e8ff60ae58a0bd4bfbbba2909d9239c71"],[3,"5ba2455c833d6ed3c0aac55d0582d5f7a60c83596bd2136ece9d4c82ec275a65"],[3,"93d0b5f665a83a08d3a932b40d95a1ad86b24e212e84fe0e25a5c0270712f88c"],[3,"66d94387569600795c8bd852d6a7e4c3301d58ebff92f47a18eaa75f94401ce2"],[3,"50db583bc523875bbfcaa5aee000e648976b4224a91e9caaf7d26da3f8635500"],[3,"fd6c6a7376ee49410c8355904bb0c1d01c7ea9a4493339f89ecd5288d8327efa"],[3,"4425c3094f1367348edb6a31d52d112eaa437b798939b64e3b580696ad75b859"],[3,"d570d5677c78581c1c5d8a1f6141f4c50c1f538badde113c3ac3240e510a3702"]];
 const sha = (t) => createHash('sha256').update(t).digest('hex');
 const findForbidden = (text) => {
   const lower = text.toLowerCase();
@@ -259,4 +259,22 @@ test('footer has no divider line above it', () => {
   const rule = css.match(/(?:^|[}\s])footer\s*\{([^}]*)\}/);
   assert.ok(rule, 'no footer rule');
   assert.ok(!/border-top/.test(rule[1]), 'footer still draws a top border');
+});
+
+test('OIBC lives in its own Contest section below Projects', () => {
+  const proj = html.search(/<h2[^>]*>Projects<\/h2>/);
+  const contest = html.search(/<h2[^>]*>Contest<\/h2>/);
+  assert.ok(contest > proj, 'Contest heading missing or not below Projects');
+  const projSection = html.slice(proj, contest);
+  const contestSection = html.slice(contest);
+  assert.ok(!projSection.includes('OIBC 경진대회'), 'OIBC should not be under Projects');
+  assert.ok(/<details class="project"[\s\S]*?OIBC 경진대회/.test(contestSection), 'OIBC toggle missing under Contest');
+});
+
+test('each toggle group closes with its own bottom line', () => {
+  const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n')
+    + [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]).join('\n');
+  assert.ok(/\.toggle-list>?\s*>?\s*\.project:last-child\s*\{[^}]*border-bottom/.test(css), 'no per-group bottom line rule');
+  const groups = [...html.matchAll(/<div class="toggle-list">([\s\S]*?)<\/div>\s*(?=<h2|<footer)/g)];
+  assert.equal(groups.length, 2, 'Projects and Contest should each have a toggle-list');
 });

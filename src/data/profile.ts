@@ -71,7 +71,8 @@ export const featuredStats = [
   { value: `${featured.totalSubmissions}회`, label: '팀 전체 제출' },
 ];
 
-export const others = [
+// Contest 섹션에 보이는 대회
+export const contests = [
   {
     title: 'OIBC 경진대회',
     problem:
@@ -98,6 +99,11 @@ export const others = [
       { value: '+507만 원', label: '2단계 보정 효과' },
     ],
   },
+
+];
+
+// Projects 섹션에 대표 프로젝트 다음으로 보이는 프로젝트
+export const otherProjects: typeof contests = [
   // 뜰까말까 — 잠시 숨김. 다시 보이게 하려면 아래 주석(//)을 지우세요.
   // {
   //   title: '뜰까말까',

@@ -1,10 +1,9 @@
 ---
 import '../styles/global.css';
-import RmseChart from '../components/RmseChart.astro';
-import { profile, education, activities, featured, featuredStats, others } from '../data/profile';
+import ProjectToggle from '../components/ProjectToggle.astro';
+import { profile, education, activities, featured, featuredStats, otherProjects, contests } from '../data/profile';
 
-// 세 프로젝트를 같은 틀(문제 정의 · 역할 · 기술 · 결과 숫자)로 그립니다. IBA만 RMSE 그래프가 붙습니다.
-const projects = [{ ...featured, stats: featuredStats }, ...others.map((o) => ({ ...o, rmse: undefined, finalN: undefined }))];
+const projects = [{ ...featured, stats: featuredStats }, ...otherProjects];
 const githubLabel = profile.github.replace('https://', '');
 ---
 <!doctype html>
@@ -65,29 +64,10 @@ const githubLabel = profile.github.replace('https://', '');
 
         <h2>Projects</h2>
 
-        {projects.map((p) => (
-          <details class="project">
-            <summary><span class="ptitle">{p.title}</span></summary>
-            <div class="body">
-              <h4>문제 정의</h4>
-              <p>{p.problem}</p>
+        <div class="toggle-list">{projects.map((p) => <ProjectToggle item={p} />)}</div>
 
-              <h4>역할</h4>
-              <ul>{p.role.map((r) => <li>{r}</li>)}</ul>
-
-              <h4>기술</h4>
-              <ul>{p.tech.map((t) => <li>{t}</li>)}</ul>
-
-              <h4>결과</h4>
-              <div class="stats">
-                {p.stats.map((st, i) => (
-                  <div class={i === 0 ? 'stat best' : 'stat'} title={st.label} aria-label={`${st.label}: ${st.value}`}><b>{st.value}</b></div>
-                ))}
-              </div>
-              {p.rmse && <RmseChart points={p.rmse} finalN={p.finalN!} />}
-            </div>
-          </details>
-        ))}
+        <h2 class="section-gap">Contest</h2>
+        <div class="toggle-list">{contests.map((c) => <ProjectToggle item={c} />)}</div>
 
         <footer>
           <a href={profile.github}>{githubLabel}</a> · Built with Astro · Hosted on GitHub Pages

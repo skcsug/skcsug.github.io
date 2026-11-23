@@ -72,9 +72,12 @@ h4 { font-size: 17px; margin: 28px 0 6px; }
 .edu-degree { color: var(--text); margin-right: 28px; }
 .edu-school { display: inline-block; }
 
+/* Projects 다음 섹션 제목 위 간격 */
+.section-gap { margin-top: 36px; }
+
 /* 프로젝트 토글 */
 .project { border-top: 1px solid var(--line); margin: 0; }
-.project:last-of-type { border-bottom: 1px solid var(--line); }
+.toggle-list > .project:last-child { border-bottom: 1px solid var(--line); }
 .project summary {
   list-style: none; cursor: pointer; position: relative;
   padding: 12px 40px 12px 0;
