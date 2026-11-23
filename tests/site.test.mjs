@@ -305,3 +305,15 @@ test('OIBC result leads with the final rank', () => {
   assert.equal(first[1], '78위');
   assert.equal(first[2], '385팀 중 상위 20%');
 });
+
+test('profile shows the new tagline and a small photo avatar', () => {
+  const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)[1];
+  assert.ok(aside.includes('데이터로 결정을 설계하는 분석가'), 'new tagline missing');
+  assert.ok(!html.includes('지망생'), 'old tagline still present');
+  const img = aside.match(/<img[^>]+src="\/profile\.jpg"[^>]*>/);
+  assert.ok(img, 'avatar photo missing');
+  assert.ok(/alt="[^"]+"/.test(img[0]), 'avatar needs alt text');
+  const buf = readFileSync(join(dist, 'profile.jpg'));
+  assert.ok(buf.length < 80_000, `photo too heavy: ${buf.length} bytes`);
+  assert.ok(!buf.includes(Buffer.from('Exif')), 'photo still carries EXIF metadata');
+});

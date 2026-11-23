@@ -19,7 +19,7 @@ const githubLabel = profile.github.replace('https://', '');
   <body>
     <div class="layout">
       <aside class="profile">
-        <div class="avatar" aria-hidden="true">{profile.nickname[0].toUpperCase()}</div>
+        <div class="avatar"><img src="/profile.jpg" alt={`${profile.nickname} 프로필 사진`} width="84" height="84" /></div>
         <h1>{profile.nickname}</h1>
         <p class="tagline">{profile.tagline}</p>
         <div class="buttons">

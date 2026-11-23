@@ -41,7 +41,9 @@ a:hover { text-decoration: underline; }
   background: var(--soft); border: 1px solid var(--line);
   display: grid; place-items: center;
   font-size: 34px; font-weight: 700; color: var(--accent);
+  overflow: hidden;
 }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
 .profile h1 { margin: 14px 0 0; font-size: 28px; line-height: 1.2; letter-spacing: -0.01em; }
 .tagline { margin: 4px 0 14px; color: var(--muted); }
 .buttons { display: flex; gap: 4px 16px; flex-wrap: wrap; }
