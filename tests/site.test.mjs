@@ -8,7 +8,7 @@ test('page shows required assignment content', () => {
   for (const s of [
     'skcsug',
     'github.com/skcsug',
-    '영국 중고차 가격 예측',
+    'IBA ML 회귀 토이 프로젝트',
     '문제 정의',
     '역할',
     '기술',
@@ -223,4 +223,9 @@ test('project titles use the same plain 16px text as Education rows', () => {
     assert.ok(!size || Number(size[1]) <= 16, `.ptitle font-size too large: ${size && size[1]}px`);
     assert.ok(!/font-weight:\s*(600|700|bold)/.test(r), '.ptitle should not be bold');
   }
+});
+
+test('project toggle titles are the short names', () => {
+  const titles = [...html.matchAll(/<summary[^>]*>([\s\S]*?)<\/summary>/g)].map((m) => m[1].replace(/<[^>]+>/g, '').trim());
+  assert.deepEqual(titles, ['IBA ML 회귀 토이 프로젝트', 'OIBC 경진대회', '뜰까말까']);
 });
