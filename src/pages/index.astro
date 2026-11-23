@@ -67,12 +67,8 @@ const githubLabel = profile.github.replace('https://', '');
 
         <h2>Projects</h2>
 
-        <details class="project" open>
-          <summary>
-            <span class="badge">대표</span>
-            <span class="ptitle">{featured.title}</span>
-            <span class="meta">{featured.period}</span>
-          </summary>
+        <details class="project">
+          <summary><span class="ptitle">{featured.title}</span></summary>
           <div class="body">
             <h4>문제 정의</h4>
             <p>{featured.problem}</p>
@@ -101,24 +97,24 @@ const githubLabel = profile.github.replace('https://', '');
                 </figure>
               ))}
             </div>
-
-            <h4>링크</h4>
-            <dl class="links">
-              <dt>데모</dt><dd>{featured.demo ? <a href={featured.demo}>{featured.demo}</a> : '없음 (대회 제출용 모델)'}</dd>
-              <dt>소스 코드</dt><dd>{featured.source}</dd>
-            </dl>
           </div>
         </details>
 
         {others.map((o) => (
           <details class="project">
-            <summary>
-              <span class="ptitle">{o.title}</span>
-              <span class="meta">{o.tags.join(' · ')}</span>
-            </summary>
+            <summary><span class="ptitle">{o.title}</span></summary>
             <div class="body">
-              <p>{o.summary}</p>
-              <ul class="tags">{o.tags.map((t) => <li>{t}</li>)}</ul>
+              <h4>문제 정의</h4>
+              <p>{o.problem}</p>
+
+              <h4>역할</h4>
+              <ul>{o.role.map((r) => <li>{r}</li>)}</ul>
+
+              <h4>기술</h4>
+              <ul>{o.tech.map((t) => <li>{t}</li>)}</ul>
+
+              <h4>결과</h4>
+              <p>{o.result}</p>
             </div>
           </details>
         ))}

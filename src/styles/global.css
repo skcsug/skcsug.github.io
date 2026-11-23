@@ -89,11 +89,8 @@ h4 { font-size: 17px; margin: 28px 0 6px; }
 .project summary:hover .ptitle { color: var(--accent); }
 .project summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .ptitle { font-size: 19px; font-weight: 700; line-height: 1.4; }
-.project summary .meta { flex-basis: 100%; }
-.badge { font-size: 13px; font-weight: 600; color: var(--accent); }
 .body { padding: 0 0 24px; }
 .body > h4:first-child { margin-top: 16px; }
-.body > p:first-child { margin-top: 14px; }
 ul { padding-left: 20px; margin: 6px 0; }
 li { margin: 2px 0; }
 
@@ -118,9 +115,6 @@ figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
 .chart .final { fill: none; stroke: var(--accent); stroke-width: 2; }
 .chart .label { fill: var(--text); font-size: 13px; font-weight: 600; }
 
-.links { display: grid; grid-template-columns: max-content 1fr; gap: 2px 16px; margin: 6px 0; }
-.links dt { color: var(--muted); }
-.links dd { margin: 0; }
 
 footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
 

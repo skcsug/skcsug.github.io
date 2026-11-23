@@ -13,7 +13,6 @@ test('page shows required assignment content', () => {
     '역할',
     '기술',
     '결과',
-    '팀 저장소(비공개)',
     '2,010.31',
     '2,122.44',
   ]) {
@@ -125,12 +124,24 @@ test('profile sits in a left sidebar before the projects', () => {
   assert.ok(html.indexOf('<aside') < html.indexOf('Projects'), 'sidebar should come before Projects');
 });
 
-test('projects are toggles under a Projects heading, featured open', () => {
+test('projects are closed toggles showing only the title', () => {
   assert.ok(/<h2[^>]*>Projects<\/h2>/.test(html), 'no "Projects" heading');
-  const toggles = [...html.matchAll(/<details([^>]*)>\s*<summary/g)];
+  const toggles = [...html.matchAll(/<details([^>]*)>\s*<summary[^>]*>([\s\S]*?)<\/summary>/g)];
   assert.equal(toggles.length, 3, 'expected 3 project toggles');
-  assert.ok(/\bopen\b/.test(toggles[0][1]), 'featured project toggle should start open');
-  assert.ok(!/\bopen\b/.test(toggles[1][1]) && !/\bopen\b/.test(toggles[2][1]), 'other toggles should start closed');
+  for (const [, attrs, summary] of toggles) {
+    assert.ok(!/\bopen\b/.test(attrs), 'toggles should start closed');
+    const text = summary.replace(/<[^>]+>/g, '').trim();
+    assert.ok(!/대표|·/.test(text), `summary should be the title only, got: ${text}`);
+  }
+});
+
+test('every project body is 문제 정의 → 역할 → 기술 → 결과 only', () => {
+  const bodies = [...html.matchAll(/<\/summary>([\s\S]*?)<\/details>/g)].map((m) => m[1]);
+  assert.equal(bodies.length, 3);
+  for (const body of bodies) {
+    const heads = [...body.matchAll(/<h4[^>]*>([^<]+)<\/h4>/g)].map((m) => m[1].trim());
+    assert.deepEqual(heads, ['문제 정의', '역할', '기술', '결과']);
+  }
 });
 
 test('interests describe the decision-support analyst goal', () => {
