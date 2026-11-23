@@ -77,18 +77,18 @@ h4 { font-size: 17px; margin: 28px 0 6px; }
 .project:last-of-type { border-bottom: 1px solid var(--line); }
 .project summary {
   list-style: none; cursor: pointer; position: relative;
-  padding: 16px 40px 16px 0;
+  padding: 12px 40px 12px 0;
   display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px;
 }
 .project summary::-webkit-details-marker { display: none; }
 .project summary::after {
   content: '+'; position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
-  font-size: 22px; line-height: 1; color: var(--muted);
+  font-size: 18px; line-height: 1; color: var(--muted);
 }
 .project[open] > summary::after { content: '−'; }
 .project summary:hover .ptitle { color: var(--accent); }
 .project summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.ptitle { font-size: 19px; font-weight: 700; line-height: 1.4; }
+.ptitle { font-size: 16px; font-weight: 400; color: var(--text); }
 .body { padding: 0 0 24px; }
 .body > h4:first-child { margin-top: 16px; }
 ul { padding-left: 20px; margin: 6px 0; }
@@ -128,9 +128,8 @@ footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line);
   .layout { padding: 28px 16px 32px; }
   .avatar { width: 64px; height: 64px; font-size: 26px; }
   .profile h1 { font-size: 26px; }
-  .project summary { padding: 14px 32px 14px 0; }
+  .project summary { padding: 12px 32px 12px 0; }
   .project summary::after { right: 4px; }
-  .ptitle { font-size: 17px; }
   .body { padding: 0 0 20px; }
   .stat { padding: 4px 0; }
   .stat b { font-size: 18px; }

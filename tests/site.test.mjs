@@ -212,3 +212,15 @@ test('no rounded boxes anywhere except the round avatar', () => {
     assert.ok(rule && !/(^|;)\s*border:\s*1px/.test(rule[1]) && !/background:\s*var\(--soft\)/.test(rule[1]), `${sel} still drawn as a box`);
   }
 });
+
+test('project titles use the same plain 16px text as Education rows', () => {
+  const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n')
+    + [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]).join('\n');
+  const rules = [...css.matchAll(/\.ptitle\s*\{([^}]*)\}/g)].map((m) => m[1]);
+  assert.ok(rules.length > 0, 'no .ptitle rule');
+  for (const r of rules) {
+    const size = r.match(/font-size:\s*(\d+)px/);
+    assert.ok(!size || Number(size[1]) <= 16, `.ptitle font-size too large: ${size && size[1]}px`);
+    assert.ok(!/font-weight:\s*(600|700|bold)/.test(r), '.ptitle should not be bold');
+  }
+});
