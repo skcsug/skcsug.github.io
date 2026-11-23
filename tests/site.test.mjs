@@ -181,3 +181,11 @@ test('Activities uses the Education row style with only name, group and date', (
   assert.ok(!sec.includes('Pusan National University'), 'university should be dropped from Activities');
   assert.ok(!sec.includes('팀 리드') && !sec.includes('교육 세션'), 'detail bullets should be removed');
 });
+
+test('no pill-shaped chips anywhere', () => {
+  const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n')
+    + [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]).join('\n');
+  assert.ok(!/border-radius:\s*999px/.test(css), 'pill radius (999px) still in CSS');
+  const tagRule = css.match(/\.tags li\s*\{([^}]*)\}/);
+  assert.ok(tagRule && !/border:|background:/.test(tagRule[1]), '.tags li should have no border/background');
+});
