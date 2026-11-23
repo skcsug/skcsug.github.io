@@ -1,12 +1,10 @@
 ---
 import '../styles/global.css';
 import RmseChart from '../components/RmseChart.astro';
-import { profile, education, activities, featured, others } from '../data/profile';
+import { profile, education, activities, featured, featuredStats, others } from '../data/profile';
 
-const fmt = (v: number) => v.toLocaleString('en-US', { minimumFractionDigits: 2 });
-const first = featured.rmse[0];
-const final = featured.rmse.find((p) => p.n === featured.finalN)!;
-const gain = (((first.rmse - final.rmse) / first.rmse) * 100).toFixed(1);
+// 세 프로젝트를 같은 틀(문제 정의 · 역할 · 기술 · 결과 숫자)로 그립니다. IBA만 RMSE 그래프가 붙습니다.
+const projects = [{ ...featured, stats: featuredStats }, ...others.map((o) => ({ ...o, rmse: undefined, finalN: undefined }))];
 const githubLabel = profile.github.replace('https://', '');
 ---
 <!doctype html>
@@ -67,54 +65,26 @@ const githubLabel = profile.github.replace('https://', '');
 
         <h2>Projects</h2>
 
-        <details class="project">
-          <summary><span class="ptitle">{featured.title}</span></summary>
-          <div class="body">
-            <h4>문제 정의</h4>
-            <p>{featured.problem}</p>
-
-            <h4>역할</h4>
-            <ul>{featured.role.map((r) => <li>{r}</li>)}</ul>
-
-            <h4>기술</h4>
-            <ul>{featured.tech.map((t) => <li>{t}</li>)}</ul>
-
-            <h4>결과</h4>
-            <p>{featured.result}</p>
-            <div class="stats">
-              <div class="stat"><span>첫 제출 Public RMSE</span><b>{fmt(first.rmse)}</b></div>
-              <div class="stat best"><span>최종 선택 #{final.n} Public RMSE</span><b>{fmt(final.rmse)}</b></div>
-              <div class="stat"><span>개선 폭</span><b>−{gain}%</b></div>
-            </div>
-            <RmseChart points={featured.rmse} finalN={featured.finalN} />
-            <p>{featured.lesson}</p>
-
-            <div class="figures">
-              {featured.figures.map((f) => (
-                <figure>
-                  <img src={f.src} alt={f.caption} loading="lazy" width="2200" height="1240" />
-                  <figcaption>{f.caption}</figcaption>
-                </figure>
-              ))}
-            </div>
-          </div>
-        </details>
-
-        {others.map((o) => (
+        {projects.map((p) => (
           <details class="project">
-            <summary><span class="ptitle">{o.title}</span></summary>
+            <summary><span class="ptitle">{p.title}</span></summary>
             <div class="body">
               <h4>문제 정의</h4>
-              <p>{o.problem}</p>
+              <p>{p.problem}</p>
 
               <h4>역할</h4>
-              <ul>{o.role.map((r) => <li>{r}</li>)}</ul>
+              <ul>{p.role.map((r) => <li>{r}</li>)}</ul>
 
               <h4>기술</h4>
-              <ul>{o.tech.map((t) => <li>{t}</li>)}</ul>
+              <ul>{p.tech.map((t) => <li>{t}</li>)}</ul>
 
               <h4>결과</h4>
-              <p>{o.result}</p>
+              <div class="stats">
+                {p.stats.map((st, i) => (
+                  <div class={i === 0 ? 'stat best' : 'stat'}><b>{st.value}</b><span>{st.label}</span></div>
+                ))}
+              </div>
+              {p.rmse && <RmseChart points={p.rmse} finalN={p.finalN!} />}
             </div>
           </details>
         ))}

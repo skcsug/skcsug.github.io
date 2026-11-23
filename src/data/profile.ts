@@ -44,17 +44,6 @@ export const featured = {
     '그룹 최빈값·중앙값 기반 결측치 대체',
     'Git 브랜치·PR 협업, 제출 파일 자동 검증',
   ],
-  result:
-    '팀 전체 31번 제출(기록된 제출 27건) 동안 Public RMSE를 첫 제출 2,122.44에서 최종 선택한 #19의 2,010.31까지 낮췄습니다(약 5.3% 개선, R² 0.9563).',
-  lesson:
-    '가장 크게 배운 점은 "CV 점수가 좋아져도 Public 점수는 나빠질 수 있다"는 것입니다. ' +
-    '튜닝을 더 해서 CV가 좋아진 제출이 오히려 Public에서 밀린 적이 여러 번 있었고, ' +
-    '그 뒤로는 점수 하나보다 fold별 편차와 여러 seed의 평균을 보고 판단하도록 기준을 바꿨습니다.',
-  figures: [
-    { src: '/figures/02_missing_by_column.png', caption: '빈칸은 train에만 있음 — 주행거리 1.3%, 자동차세 8.7%, 연비 9.5%' },
-    { src: '/figures/04_imputation_error.png', caption: '비슷한 차들의 최빈값으로 채우면 전체 중앙값보다 오차가 3~6배 작음' },
-    { src: '/figures/06_price_by_year.png', caption: '연식별 가격 분포' },
-  ],
   // submissions/log.md의 정상 제출 기록 (제출 번호, Public RMSE)
   rmse: [
     { n: 1, rmse: 2122.44 }, { n: 2, rmse: 2128.45 }, { n: 3, rmse: 2063.54 },
@@ -68,7 +57,19 @@ export const featured = {
     { n: 29, rmse: 2013.15 }, { n: 30, rmse: 2024.42 }, { n: 31, rmse: 2028.12 },
   ],
   finalN: 19,
+  r2: '0.9563',
+  totalSubmissions: 31,
 };
+
+const fmtRmse = (v: number) => v.toLocaleString('en-US', { minimumFractionDigits: 2 });
+const firstRmse = featured.rmse[0].rmse;
+const finalRmse = featured.rmse.find((p) => p.n === featured.finalN)!.rmse;
+export const featuredStats = [
+  { value: fmtRmse(finalRmse), label: `최종 선택 #${featured.finalN} Public RMSE (첫 제출 ${fmtRmse(firstRmse)})` },
+  { value: `−${(((firstRmse - finalRmse) / firstRmse) * 100).toFixed(1)}%`, label: 'RMSE 개선 폭' },
+  { value: featured.r2, label: '최종 R²' },
+  { value: `${featured.totalSubmissions}회`, label: '팀 전체 제출' },
+];
 
 export const others = [
   {
@@ -90,12 +91,12 @@ export const others = [
       '외부 기상 예보 5종: NOAA GFS·GEFS, ECMWF, Copernicus CAMS, 기상청 LDAPS',
       'GitHub PR 협업, 클라우드 VM·원격 데스크톱 병렬 실험',
     ],
-    result:
-      '첫 제출 대비 정산금을 +2,394만 원(6,444,957,097 → 6,468,895,230원, 11/12 기준) 올렸고, 내부 검증 페널티(3년 합)를 15.9% 줄였습니다. ' +
-      '가장 큰 개선은 외부 예보 GFS·GEFS 추가(+1,134만 원)와 2단계 보정(+507만 원)이었습니다. ' +
-      '진단해 보니 페널티의 약 80%가 모든 발전소가 같은 시각에 같은 방향으로 틀리는 공통 날씨 오차였고, ' +
-      '이후 큰 개선은 CAMS·구름 유형처럼 새로운 입력 정보가 들어왔을 때만 나왔습니다. ' +
-      '"남은 개선은 모델 구조가 아니라 새 정보에서 나온다"는 것이 가장 큰 배움이었습니다.',
+    stats: [
+      { value: '+2,394만 원', label: '첫 제출 대비 정산금 (11/12 기준)' },
+      { value: '−15.9%', label: '내부 검증 페널티 (3년 합)' },
+      { value: '+1,134만 원', label: '외부 예보 GFS·GEFS 추가 효과' },
+      { value: '+507만 원', label: '2단계 보정 효과' },
+    ],
   },
   {
     title: '뜰까말까',
@@ -111,8 +112,10 @@ export const others = [
       'HTML · CSS · JavaScript(jQuery, AJAX)',
       '공공데이터포털 API: 한국공항공사 출발·도착편, 기상청 단기예보·기상특보',
     ],
-    result:
-      '편명과 날짜를 넣으면 결항 / 확정 지연 / 예측 모드로 자동 분기합니다. ' +
-      '아직 출발 전인 항공편은 풍속·강수·기상특보와 직전편 지연을 합산해 0~100점 지연 확률과 요인별 원인 분석을 보여줍니다.',
+    stats: [
+      { value: '4종', label: '연동한 공공데이터 API' },
+      { value: '3가지', label: '결과 모드 (결항 · 확정 지연 · 예측)' },
+      { value: '0~100점', label: '지연 확률 점수' },
+    ],
   },
 ];
