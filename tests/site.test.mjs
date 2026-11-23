@@ -88,7 +88,8 @@ test('copy states submission counts accurately', () => {
 
 test('OIBC section uses the retrospective numbers', () => {
   const body = html.split('OIBC 경진대회')[1].split('</details>')[0];
-  for (const t of ['253개', '82%', '+2,394만', '−15.9%', '+1,134만', '+507만', 'GFS', 'CAMS']) {
+  assert.ok(!body.includes('+1,134만') && !body.includes('+507만'), 'removed OIBC tiles still shown');
+  for (const t of ['253개', '82%', '+2,394만', '−15.9%', 'GFS', 'CAMS']) {
     assert.ok(body.includes(t), `OIBC body missing ${t}`);
   }
   assert.ok(!body.includes('4.2%'), 'old interim 4.2% figure still shown');
@@ -240,7 +241,7 @@ test('every result number has a short one-line label', () => {
     assert.ok(!/<img/.test(result), '결과 should have no images');
     assert.ok(!/<figcaption/.test(result), '결과 should have no captions');
     const tiles = [...result.matchAll(/<div class="stat(?: best)?"([^>]*)>([\s\S]*?)<\/div>/g)];
-    assert.ok(tiles.length >= 3, `expected >=3 number tiles, got ${tiles.length}`);
+    assert.ok(tiles.length >= 2, `expected >=2 number tiles, got ${tiles.length}`);
     for (const [, attrs, inner] of tiles) {
       assert.ok(/title="[^"]+"/.test(attrs), 'tile should keep the long explanation as a hover title');
       const value = inner.match(/<b[^>]*>([^<]+)<\/b>/);
@@ -255,7 +256,8 @@ test('every result number has a short one-line label', () => {
 });
 test('IBA result tiles show the verified leaderboard numbers', () => {
   const body = html.split('<span class="ptitle">IBA ML 회귀 토이 프로젝트')[1].split('</details>')[0];
-  for (const t of ['2,010.31', '2,122.44', '−5.3%', '0.9563', '31회']) assert.ok(body.includes(t), `IBA missing ${t}`);
+  for (const t of ['2,010.31', '2,122.44', '−5.3%', '0.9563']) assert.ok(body.includes(t), `IBA missing ${t}`);
+  assert.ok(!/<b>31회<\/b>/.test(body), '31회 tile should be removed');
 });
 
 test('footer has no divider line above it', () => {
@@ -288,7 +290,9 @@ test('classification project shows the deck numbers under Projects', () => {
   const proj = html.slice(html.search(/<h2[^>]*>Projects<\/h2>/), html.search(/<h2[^>]*>Contest<\/h2>/));
   const body = proj.split('<span class="ptitle">IBA ML 분류 토이 프로젝트')[1];
   assert.ok(body, 'classification toggle missing under Projects');
-  for (const t of ['800명', '0.6667', '21종', '5 : 1', '81 · 17 · 102', '팀장', '비용행렬']) {
+  assert.ok(!/<b>5 : 1<\/b>/.test(body) && !/<b>81 · 17 · 102<\/b>/.test(body), 'removed classification tiles still shown');
+  assert.ok(/<b>21종<\/b><span class="stat-label">비교한 모델 수<\/span>/.test(body), '21종 label should read 비교한 모델 수');
+  for (const t of ['800명', '0.6667', '21종', '팀장', '비용행렬']) {
     assert.ok(body.includes(t), `classification project missing ${t}`);
   }
 });
