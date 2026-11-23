@@ -146,3 +146,12 @@ test('sidebar lists Skills under interests', () => {
   const tags = [...aside.slice(at).matchAll(/<li[^>]*>([^<]+)<\/li>/g)].map((m) => m[1]);
   assert.deepEqual(tags, ['Python', 'ML', 'C/C++', 'CSS/HTML/JavaScript']);
 });
+
+test('Education section sits above Projects', () => {
+  const edu = html.search(/<h2[^>]*>Education<\/h2>/);
+  assert.ok(edu > -1, 'no Education heading');
+  assert.ok(edu < html.search(/<h2[^>]*>Projects<\/h2>/), 'Education should come before Projects');
+  for (const s of ['Pusan National University', '2026 ~', 'Computer Science &amp; Engineering']) {
+    assert.ok(html.includes(s), `missing ${s}`);
+  }
+});

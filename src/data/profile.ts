@@ -16,6 +16,10 @@ export const profile = {
   resumeUrl: null as string | null,
 };
 
+export const education = [
+  { school: 'Pusan National University', period: '2026 ~', major: 'Computer Science & Engineering' },
+];
+
 export const featured = {
   title: '영국 중고차 가격 예측',
   period: '2026.11 · IBA 회귀 대회 · 3인 팀',
