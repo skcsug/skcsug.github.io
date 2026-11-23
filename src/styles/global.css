@@ -72,6 +72,13 @@ h4 { font-size: 17px; margin: 28px 0 6px; }
 .entry-sub { margin: 2px 0 0; color: var(--muted); }
 .entry-points { margin: 6px 0 0; font-size: 15px; }
 
+/* Education: 글머리 기호 + "학위, 전공   학교 (기간)" 한 줄, 줄마다 밑줄 */
+.edu { padding-left: 22px; margin: 0; }
+.edu li { color: var(--muted); padding: 12px 0 12px 6px; border-bottom: 1px solid var(--line); margin: 0; }
+.edu li::marker { color: var(--muted); }
+.edu-degree { color: var(--text); margin-right: 28px; }
+.edu-school { display: inline-block; }
+
 /* 프로젝트 토글 */
 .project { border: 1px solid var(--line); border-radius: 10px; margin: 0 0 14px; background: var(--bg); }
 .project summary {

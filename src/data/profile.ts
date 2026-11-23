@@ -17,7 +17,7 @@ export const profile = {
 };
 
 export const education = [
-  { school: 'Pusan National University', period: '2026 ~', major: 'Computer Science & Engineering' },
+  { degree: 'B.S.', major: 'Computer Science & Engineering', school: 'Pusan National University', period: '2026 ~' },
 ];
 
 export const activities = [

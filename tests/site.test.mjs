@@ -165,3 +165,10 @@ test('Activities section lists IBA between Education and Projects', () => {
   }
   assert.ok(!html.includes('KEEPER'), 'KEEPER should not be listed');
 });
+
+test('Education uses the bulleted degree · school (date) row style', () => {
+  const sec = html.match(/<h2[^>]*>Education<\/h2>([\s\S]*?)<\/section>/)[1];
+  assert.ok(/<ul class="edu"/.test(sec), 'Education should be a <ul class="edu"> list');
+  assert.ok(/<li[^>]*>[\s\S]*B\.S\., Computer Science &amp; Engineering[\s\S]*Pusan National University \(<em[^>]*>2026 ~<\/em>\)/.test(sec),
+    'row should read "B.S., Computer Science & Engineering  Pusan National University (2026 ~)" with italic date');
+});
