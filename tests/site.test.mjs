@@ -391,3 +391,20 @@ test('sidebar links read just GitHub and Resume, avatar matches resume size', ()
   const avatar = css.match(/\.avatar\{[^}]*width:(\d+)px/);
   assert.ok(avatar && Number(avatar[1]) >= 120, `avatar should be ~32mm (>=120px), got ${avatar && avatar[1]}`);
 });
+
+test('OIBC retrospective is downloadable from the Contest toggle', () => {
+  const body = html.split('<span class="ptitle">OIBC 경진대회')[1].split('</details>')[0];
+  assert.ok(/href="\/oibc-retrospective\.pdf"/.test(body), 'OIBC toggle should link the retrospective PDF');
+  const pdf = readFileSync(join(dist, 'oibc-retrospective.pdf')).toString('latin1');
+  assert.ok(pdf.startsWith('%PDF'), 'retrospective PDF missing or invalid');
+});
+
+test('retrospective page keeps the numbers and uses a formal written register', () => {
+  const r = readFileSync(join(dist, 'oibc-retrospective', 'index.html'), 'utf8');
+  for (const t of ['253개', '82%', '+23,938,133원', '6,468,895,230', '15.9%', '385팀 중 78위', '−25.8%', '1,200만 원']) {
+    assert.ok(r.includes(t), `retrospective missing ${t}`);
+  }
+  const text = r.replace(/<[^>]+>/g, ' ');
+  assert.equal((text.match(/습니다/g) || []).length, 0, 'retrospective should use 평서체 (~했다/~이다), not 합니다체');
+  assert.ok(!/<del>/.test(r), 'ranges like 1~2 must not turn into strikethrough');
+});

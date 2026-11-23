@@ -36,7 +36,7 @@ const { item } = Astro.props;
     </div>
     {item.rmse && item.finalN && <RmseChart points={item.rmse} finalN={item.finalN} />}
     {item.links && (
-      <div class="proj-links">{item.links.map((l) => <a href={l.href}>{l.label} →</a>)}</div>
+      <div class="proj-links">{item.links.map((l) => <a href={l.href} download={l.href.endsWith('.pdf') ? '' : undefined}>{l.label} →</a>)}</div>
     )}
   </div>
 </details>

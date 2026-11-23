@@ -96,6 +96,7 @@ export const contests = [
       { value: '+2,394만 원', label: '첫 제출 대비 정산금 (11/12 기준)', short: '정산금 증가' },
       { value: '−15.9%', label: '내부 검증 페널티 (3년 합)', short: '검증 페널티 감소' },
     ],
+    links: [{ label: '회고록 PDF 다운로드', href: '/oibc-retrospective.pdf' }],
   },
 
 ];

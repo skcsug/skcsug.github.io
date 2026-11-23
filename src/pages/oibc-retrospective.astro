@@ -1,0 +1,39 @@
+---
+// OIBC 회고록 인쇄용 페이지. `npm run pdf`가 public/oibc-retrospective.pdf로 저장합니다.
+// 내용은 src/data/oibc-retrospective.md에서 고칩니다.
+import { Content } from '../data/oibc-retrospective.md';
+---
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>2026 OIBC Challenge 회고</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <style is:global>
+      @page { size: A4; margin: 14mm 14mm; }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: #fff; color: #1f2328; font-family: 'Pretendard', -apple-system, 'Apple SD Gothic Neo', sans-serif; font-size: 9.5pt; line-height: 1.6; word-break: keep-all; }
+      main { max-width: 182mm; margin: 0 auto; }
+      h1 { font-size: 19pt; margin: 0 0 3mm; }
+      h2 { font-size: 13pt; margin: 7mm 0 2mm; padding-bottom: 1mm; border-bottom: 1.2px solid #1f2328; break-after: avoid; }
+      h3 { font-size: 10.5pt; margin: 4mm 0 1.5mm; break-after: avoid; }
+      p { margin: 1.5mm 0; }
+      blockquote { margin: 0 0 4mm; padding: 2mm 0 2mm 4mm; border-left: 3px solid #2563eb; color: #424a53; }
+      blockquote p { margin: 0.6mm 0; }
+      ul { margin: 1mm 0; padding-left: 5mm; }
+      li { margin: 0.6mm 0; }
+      table { width: 100%; border-collapse: collapse; margin: 2mm 0; font-size: 8.5pt; break-inside: auto; }
+      tr { break-inside: avoid; }
+      th, td { text-align: left; vertical-align: top; padding: 1.2mm 1.6mm; border-bottom: 1px solid #e5e7eb; }
+      th { border-bottom: 1.2px solid #1f2328; font-weight: 700; }
+      pre { font-size: 7.6pt; line-height: 1.45; background: #f6f8fa; padding: 3mm; overflow-x: auto; break-inside: avoid; }
+      code { font-family: ui-monospace, Menlo, monospace; font-size: 0.92em; }
+      @media screen { body { padding: 10mm 4mm; } }
+    </style>
+  </head>
+  <body>
+    <main><Content /></main>
+  </body>
+</html>
