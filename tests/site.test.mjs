@@ -317,3 +317,22 @@ test('profile shows the new tagline and a small photo avatar', () => {
   assert.ok(buf.length < 80_000, `photo too heavy: ${buf.length} bytes`);
   assert.ok(!buf.includes(Buffer.from('Exif')), 'photo still carries EXIF metadata');
 });
+
+test('link preview (Open Graph) tags point at real files', () => {
+  const meta = (p) => (html.match(new RegExp(`<meta[^>]+(?:property|name)="${p}"[^>]+content="([^"]+)"`)) || [])[1];
+  assert.equal(meta('og:url'), 'https://skcsug.github.io/');
+  assert.ok(meta('og:title') && meta('og:title').includes('skcsug'), 'og:title missing');
+  assert.ok(meta('og:description') && meta('og:description').includes('데이터로 결정을 설계하는 분석가'), 'og:description missing');
+  assert.ok(meta('twitter:card'), 'twitter:card missing');
+  const img = meta('og:image');
+  assert.ok(img && img.startsWith('https://skcsug.github.io/'), 'og:image must be an absolute site URL');
+  assert.ok(existsSync(join(dist, img.replace('https://skcsug.github.io/', ''))), `og:image file missing: ${img}`);
+});
+
+test('tab icon is the custom S icon, not the Astro default', () => {
+  const svg = readFileSync(join(dist, 'favicon.svg'), 'utf8');
+  assert.ok(/<text[^>]*>S<\/text>/.test(svg), 'favicon.svg should draw an S');
+  assert.ok(/<link[^>]+rel="icon"[^>]+href="\/favicon\.svg"/.test(html), 'svg icon link missing');
+  const png = html.match(/<link[^>]+rel="(?:icon|apple-touch-icon)"[^>]+href="(\/[^"]+\.png)"/);
+  assert.ok(png && existsSync(join(dist, png[1])), 'png icon fallback missing');
+});
