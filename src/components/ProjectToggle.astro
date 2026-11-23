@@ -11,6 +11,7 @@ interface Props {
     stats: { value: string; label: string; short: string }[];
     rmse?: { n: number; rmse: number }[];
     finalN?: number;
+    links?: { label: string; href: string }[];
   };
 }
 const { item } = Astro.props;
@@ -34,5 +35,8 @@ const { item } = Astro.props;
       ))}
     </div>
     {item.rmse && item.finalN && <RmseChart points={item.rmse} finalN={item.finalN} />}
+    {item.links && (
+      <div class="proj-links">{item.links.map((l) => <a href={l.href}>{l.label} →</a>)}</div>
+    )}
   </div>
 </details>

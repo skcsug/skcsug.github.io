@@ -1,0 +1,187 @@
+---
+// 대출 심사 시뮬레이터 — 신청 정보를 바꾸면 로지스틱 회귀가 부실 확률과 승인·검토·거절을 바로 계산합니다.
+import '../styles/global.css';
+import spec from '../data/credit-model.json';
+
+const approve = Math.round(spec.policy.approve_below * 100);
+const review = Math.round(spec.policy.review_below * 100);
+---
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <title>대출 심사 시뮬레이터 · skcsug</title>
+    <meta name="description" content="German Credit 로지스틱 회귀로 부실 확률을 계산하고 승인·심사역 검토·자동 거절을 보여주는 데모" />
+    <meta property="og:title" content="대출 심사 시뮬레이터 · skcsug" />
+    <meta property="og:description" content="신청 정보를 바꾸면 부실 확률과 승인·검토·거절이 바로 바뀝니다." />
+    <meta property="og:image" content="https://skcsug.github.io/profile.jpg" />
+    <meta property="og:url" content="https://skcsug.github.io/credit-demo/" />
+    <style>
+      .demo { max-width: 860px; margin: 0 auto; padding: 48px 24px 40px; }
+      .demo h1 { font-size: 26px; margin: 0 0 6px; }
+      .lead { color: var(--muted); margin: 0 0 28px; }
+      .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+      form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+      label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+      label.wide { grid-column: 1 / -1; }
+      input, select { font: inherit; font-size: 15px; color: var(--text); padding: 6px 0; border: 0; border-bottom: 1px solid var(--line); background: transparent; outline: none; }
+      input:focus, select:focus { border-bottom-color: var(--accent); }
+      .result { position: sticky; top: 32px; }
+      .pct { font-size: 48px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+      .pct-label { color: var(--muted); font-size: 13px; margin-top: 6px; }
+      .verdict { font-size: 22px; font-weight: 700; margin: 18px 0 4px; }
+      .verdict.approve { color: var(--accent); }
+      .verdict.review { color: #9a6700; }
+      .verdict.reject { color: #b42318; }
+      .verdict-note { color: var(--muted); font-size: 14px; margin: 0; }
+      .bar { position: relative; height: 8px; background: var(--line); margin: 20px 0 6px; }
+      .bar-fill { position: absolute; inset: 0 auto 0 0; background: var(--text); width: 0; transition: width .2s; }
+      .bar-mark { position: absolute; top: -4px; width: 1px; height: 16px; background: var(--muted); }
+      .bar-legend { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+      .reasons { margin: 22px 0 0; padding-left: 18px; font-size: 14px; }
+      .reasons-title { font-size: 13px; color: var(--muted); margin-top: 22px; }
+      .foot { margin-top: 40px; padding-top: 16px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+      @media (max-width: 720px) {
+        .grid { grid-template-columns: 1fr; gap: 28px; }
+        .result { position: static; }
+        .demo { padding: 28px 16px 32px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="demo">
+      <a href="/">← skcsug 포트폴리오</a>
+      <h1 style="margin-top:14px">대출 심사 시뮬레이터</h1>
+      <p class="lead">신청 정보를 바꾸면 로지스틱 회귀가 부실 확률을 계산하고, 비용행렬로 정한 기준에 따라 승인 · 심사역 검토 · 자동 거절을 보여줍니다.</p>
+
+      <div class="grid">
+        <form id="f" autocomplete="off">
+          <label>당좌 잔고
+            <select name="Checking account">
+              <option value="no_account">계좌 없음</option>
+              <option value="little" selected>부족 (0 DM 미만)</option>
+              <option value="moderate">보통 (0~200 DM)</option>
+              <option value="rich">넉넉 (200 DM 이상)</option>
+            </select>
+          </label>
+          <label>저축 잔고
+            <select name="Saving accounts">
+              <option value="no_account">계좌 없음 / 모름</option>
+              <option value="little" selected>적음 (100 DM 미만)</option>
+              <option value="moderate">보통 (100~500 DM)</option>
+              <option value="quite rich">많음 (500~1000 DM)</option>
+              <option value="rich">매우 많음 (1000 DM 이상)</option>
+            </select>
+          </label>
+          <label>대출 금액 (DM)
+            <input name="Credit amount" type="number" min="250" max="20000" step="50" value="3000" />
+          </label>
+          <label>상환 기간 (개월)
+            <input name="Duration" type="number" min="4" max="72" step="1" value="24" />
+          </label>
+          <label>나이
+            <input name="Age" type="number" min="19" max="75" step="1" value="30" />
+          </label>
+          <label>직업
+            <select name="Job">
+              <option value="0">비숙련 · 비거주</option>
+              <option value="1">비숙련 · 거주</option>
+              <option value="2" selected>숙련직 · 사무직</option>
+              <option value="3">관리직 · 자영업 · 고숙련</option>
+            </select>
+          </label>
+          <label>주거 형태
+            <select name="Housing">
+              <option value="own" selected>자가</option>
+              <option value="rent">월세</option>
+              <option value="free">무상 거주</option>
+            </select>
+          </label>
+          <label>대출 목적
+            <select name="Purpose">
+              <option value="car">자동차</option>
+              <option value="furniture/equipment">가구 · 장비</option>
+              <option value="radio/TV" selected>라디오 · TV</option>
+              <option value="domestic appliances">가전제품</option>
+              <option value="repairs">수리</option>
+              <option value="education">교육</option>
+              <option value="business">사업</option>
+              <option value="vacation/others">휴가 · 기타</option>
+            </select>
+          </label>
+        </form>
+
+        <section class="result" aria-live="polite">
+          <div class="pct" id="pct">–</div>
+          <div class="pct-label">예상 부실 확률</div>
+          <div class="bar" aria-hidden="true">
+            <div class="bar-fill" id="fill"></div>
+            <div class="bar-mark" style={`left:${approve}%`}></div>
+            <div class="bar-mark" style={`left:${review}%`}></div>
+          </div>
+          <div class="bar-legend"><span>승인 &lt; {approve}%</span><span>심사역 검토 {approve}~{review}%</span><span>자동 거절 ≥ {review}%</span></div>
+          <div class="verdict" id="verdict">–</div>
+          <p class="verdict-note" id="note"></p>
+          <div class="reasons-title" id="reasons-title">판단에 크게 작용한 요인</div>
+          <ul class="reasons" id="reasons"></ul>
+        </section>
+      </div>
+
+      <div class="foot">
+        모델: 로지스틱 회귀(bad 가중치 1.8), UCI Statlog German Credit 1,000명 학습, 교차검증 F1 0.6146.
+        승인선은 부실 승인 5 : 우량 거절 1 비용행렬로 총비용이 가장 작은 지점입니다.
+        1970~90년대 독일 대출 데이터(통화 DM)로 만든 학습용 데모이며 실제 심사가 아닙니다.<br />
+        소스 코드: <a href="https://github.com/skcsug/german-credit-risk">github.com/skcsug/german-credit-risk</a>
+      </div>
+    </main>
+
+    <script>
+      import spec from '../data/credit-model.json';
+      import { scoreApplicant, decide, explain } from '../lib/creditScore.js';
+
+      const form = document.getElementById('f') as HTMLFormElement;
+      const TEXT = {
+        approve: ['승인', '부실 위험이 낮아 바로 승인합니다.'],
+        review: ['심사역 검토', '모델만으로 판단하기 애매한 구간입니다. 소득 증빙이나 한도 조정을 검토합니다.'],
+        reject: ['자동 거절', '부실 위험이 높아 거절합니다. 대출 금액이나 기간을 줄이면 결과가 달라질 수 있습니다.'],
+      } as const;
+
+      function read() {
+        const d = new FormData(form);
+        const num = (k: string, lo: number, hi: number) => Math.min(hi, Math.max(lo, Number(d.get(k)) || lo));
+        return {
+          Age: num('Age', 19, 75),
+          Job: Number(d.get('Job')),
+          Housing: String(d.get('Housing')),
+          'Saving accounts': String(d.get('Saving accounts')),
+          'Checking account': String(d.get('Checking account')),
+          'Credit amount': num('Credit amount', 250, 20000),
+          Duration: num('Duration', 4, 72),
+          Purpose: String(d.get('Purpose')),
+        };
+      }
+
+      function render() {
+        const a = read();
+        const p = scoreApplicant(spec, a);
+        const band = decide(spec, p);
+        document.getElementById('pct')!.textContent = `${(p * 100).toFixed(1)}%`;
+        (document.getElementById('fill') as HTMLElement).style.width = `${(p * 100).toFixed(1)}%`;
+        const v = document.getElementById('verdict')!;
+        v.textContent = TEXT[band][0];
+        v.className = `verdict ${band}`;
+        document.getElementById('note')!.textContent = TEXT[band][1];
+        const reasons = explain(spec, a);
+        const raising = reasons[0] && reasons[0].effect > 0;
+        document.getElementById('reasons-title')!.textContent = raising ? '위험을 높인 요인' : '위험을 낮춘 요인';
+        document.getElementById('reasons')!.innerHTML = reasons.map((r) => `<li>${r.label}</li>`).join('');
+      }
+
+      form.addEventListener('input', render);
+      render();
+    </script>
+  </body>
+</html>

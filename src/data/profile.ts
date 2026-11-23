@@ -124,6 +124,10 @@ export const otherProjects: typeof contests = [
       { value: '0.6667', label: '최종 F1-score (로지스틱 회귀, 31회 제출 중 최고)', short: '최종 F1-score' },
       { value: '21종', label: '비교한 ML 모델 수', short: '비교한 모델 수' },
     ],
+    links: [
+      { label: '데모 · 대출 심사 시뮬레이터', href: '/credit-demo/' },
+      { label: '소스 코드', href: 'https://github.com/skcsug/german-credit-risk' },
+    ],
   },
   // 뜰까말까 — 잠시 숨김. 다시 보이게 하려면 아래 주석(//)을 지우세요.
   // {

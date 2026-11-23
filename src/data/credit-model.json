@@ -1,0 +1,99 @@
+{
+  "numeric": {
+    "Age": {
+      "mean": 35.546,
+      "scale": 11.36977941738537
+    },
+    "Job": {
+      "mean": 1.904,
+      "scale": 0.6532870731921765
+    },
+    "Saving_ord": {
+      "mean": 1.19,
+      "scale": 0.966385016440135
+    },
+    "Saving_none": {
+      "mean": 0.183,
+      "scale": 0.38666652298847903
+    },
+    "Checking_ord": {
+      "mean": 1.001,
+      "scale": 0.9565558007769331
+    },
+    "Checking_none": {
+      "mean": 0.394,
+      "scale": 0.48863483297857513
+    },
+    "Credit amount": {
+      "mean": 3271.258,
+      "scale": 2821.3251545038192
+    },
+    "Duration": {
+      "mean": 20.903,
+      "scale": 12.052783537424043
+    },
+    "log_Monthly_payment": {
+      "mean": 4.91167340278736,
+      "scale": 0.6155562893035179
+    }
+  },
+  "categorical": {
+    "Housing": [
+      "non_own",
+      "own"
+    ],
+    "Purpose": [
+      "Asset purchase",
+      "Future investment",
+      "Living consumption",
+      "Others"
+    ]
+  },
+  "coef": {
+    "num__Age": -0.18626445681241255,
+    "num__Job": 0.03840511267112235,
+    "num__Saving_ord": -0.25882954938039365,
+    "num__Saving_none": -0.41509179473238905,
+    "num__Checking_ord": -0.3951066790561119,
+    "num__Checking_none": -1.0673174388229978,
+    "num__Credit amount": 0.7891211014355577,
+    "num__Duration": -0.08124867767851755,
+    "num__log_Monthly_payment": -0.6685454319934051,
+    "cat__Housing_non_own": 0.20620549867350935,
+    "cat__Housing_own": -0.2034677829281736,
+    "cat__Purpose_Asset purchase": 0.18365910331613894,
+    "cat__Purpose_Future investment": 0.3845504136458162,
+    "cat__Purpose_Living consumption": -0.12307591192825217,
+    "cat__Purpose_Others": -0.44239588928837364
+  },
+  "intercept": -0.539950220125199,
+  "maps": {
+    "saving": {
+      "no_account": 0,
+      "little": 1,
+      "moderate": 2,
+      "quite rich": 3,
+      "rich": 4
+    },
+    "checking": {
+      "no_account": 0,
+      "little": 1,
+      "moderate": 2,
+      "rich": 3
+    },
+    "purpose": {
+      "car": "Asset purchase",
+      "furniture/equipment": "Asset purchase",
+      "radio/TV": "Living consumption",
+      "domestic appliances": "Living consumption",
+      "repairs": "Living consumption",
+      "business": "Future investment",
+      "education": "Future investment",
+      "vacation/others": "Others"
+    }
+  },
+  "policy": {
+    "approve_below": 0.37,
+    "review_below": 0.5
+  }
+}

@@ -109,6 +109,7 @@ li { margin: 2px 0; }
 .stat b { display: block; font-size: 26px; line-height: 1.2; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
 .stat.best b { color: var(--accent); }
 .stat-label { font-size: 13px; line-height: 1.4; color: var(--muted); }
+.proj-links { display: flex; flex-wrap: wrap; gap: 4px 20px; margin-top: 14px; font-size: 14px; }
 
 figure { margin: 18px 0; }
 figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
