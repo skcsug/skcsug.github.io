@@ -40,5 +40,4 @@ const fmt = (v: number) => v.toLocaleString('en-US', { minimumFractionDigits: 2 
     <text x={x(final.n)} y={y(final.rmse) + 22} text-anchor="middle" class="label">최종 선택 #{final.n} · {fmt(final.rmse)}</text>
     <text x={x(first.n) - 4} y={pad.t - 12} class="label">첫 제출 {fmt(first.rmse)}</text>
   </svg>
-  <figcaption>제출 번호별 Public RMSE (낮을수록 좋음)</figcaption>
 </figure>

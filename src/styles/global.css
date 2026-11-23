@@ -102,7 +102,6 @@ li { margin: 2px 0; }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px 24px; margin: 14px 0 8px; }
 .stat { display: flex; flex-direction: column; gap: 4px; }
 .stat b { display: block; font-size: 26px; line-height: 1.2; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
-.stat span { font-size: 13px; line-height: 1.5; color: var(--muted); }
 .stat.best b { color: var(--accent); }
 
 figure { margin: 18px 0; }
@@ -133,7 +132,6 @@ footer { margin-top: 32px; color: var(--muted); font-size: 14px; }
   .body { padding: 0 0 20px; }
   .stats { grid-template-columns: 1fr 1fr; gap: 16px; }
   .stat b { font-size: 22px; }
-  .stat span { font-size: 12px; }
   /* 휴대폰에서는 그래프가 약 0.54배로 줄어들므로 SVG 안 글자를 키웁니다 */
   .chart .tick { font-size: 22px; }
   .chart .label { font-size: 22px; }

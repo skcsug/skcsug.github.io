@@ -230,7 +230,7 @@ test('project toggle titles are the short names', () => {
   assert.deepEqual(titles, ['IBA ML 회귀 토이 프로젝트', 'OIBC 경진대회']);
 });
 
-test('every project result is number tiles only', () => {
+test('every project result is bare numbers with no visible labels', () => {
   const bodies = [...html.matchAll(/<\/summary>([\s\S]*?)<\/details>/g)].map((m) => m[1]);
   assert.equal(bodies.length, 2);
   for (const body of bodies) {
@@ -238,12 +238,16 @@ test('every project result is number tiles only', () => {
     assert.ok(result, 'no 결과 section');
     assert.ok(!/<p[\s>]/.test(result), '결과 should have no prose paragraphs');
     assert.ok(!/<img/.test(result), '결과 should have no images');
-    const tiles = [...result.matchAll(/class="stat[^"]*"[^>]*>\s*<b[^>]*>([^<]+)<\/b>\s*<span[^>]*>([^<]+)<\/span>/g)];
+    assert.ok(!/<figcaption/.test(result), '결과 should have no captions');
+    const tiles = [...result.matchAll(/<div class="stat(?: best)?"([^>]*)>([\s\S]*?)<\/div>/g)];
     assert.ok(tiles.length >= 3, `expected >=3 number tiles, got ${tiles.length}`);
-    for (const [, value] of tiles) assert.ok(/\d/.test(value), `tile value should be a number: ${value}`);
+    for (const [, attrs, inner] of tiles) {
+      assert.ok(!/<span/.test(inner), 'tile should not show a label');
+      assert.ok(/title="[^"]+"/.test(attrs), 'tile should keep its meaning as a hover title');
+      assert.ok(/\d/.test(inner.replace(/<[^>]+>/g, '')), 'tile value should be a number');
+    }
   }
 });
-
 test('IBA result tiles show the verified leaderboard numbers', () => {
   const body = html.split('<span class="ptitle">IBA ML 회귀 토이 프로젝트')[1].split('</details>')[0];
   for (const t of ['2,010.31', '2,122.44', '−5.3%', '0.9563', '31회']) assert.ok(body.includes(t), `IBA missing ${t}`);
