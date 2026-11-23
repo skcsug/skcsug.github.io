@@ -37,7 +37,7 @@ a:hover { text-decoration: underline; }
 /* 프로필 사이드바 */
 .profile { position: sticky; top: 40px; }
 .avatar {
-  width: 84px; height: 84px; border-radius: 50%;
+  width: 108px; height: 108px; border-radius: 50%;
   background: var(--soft); border: 1px solid var(--line);
   display: grid; place-items: center;
   font-size: 34px; font-weight: 700; color: var(--accent);
@@ -131,7 +131,7 @@ footer { margin-top: 32px; color: var(--muted); font-size: 14px; }
 
 @media (max-width: 520px) {
   .layout { padding: 28px 16px 32px; }
-  .avatar { width: 64px; height: 64px; font-size: 26px; }
+  .avatar { width: 88px; height: 88px; font-size: 26px; }
   .profile h1 { font-size: 26px; }
   .project summary { padding: 12px 32px 12px 0; }
   .project summary::after { right: 4px; }

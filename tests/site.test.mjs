@@ -364,3 +364,20 @@ test('resume intro uses the agreed four lines', () => {
     '금융(대출 심사), 에너지(태양광 발전량), 중고차 가격 등 다양한 도메인의 데이터를 다뤘습니다.',
   ]);
 });
+
+test('profile photo is larger and high enough resolution', () => {
+  const buf = readFileSync(join(dist, 'profile.jpg'));
+  let i = 2, w = 0;
+  while (i < buf.length) {
+    const marker = buf.readUInt16BE(i);
+    if (marker >= 0xffc0 && marker <= 0xffc3) { w = buf.readUInt16BE(i + 7); break; }
+    i += 2 + buf.readUInt16BE(i + 2);
+  }
+  assert.ok(w >= 320, `photo should be >= 320px wide for the larger avatar, got ${w}`);
+  const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n');
+  const avatar = css.match(/\.avatar\{[^}]*width:(\d+)px/);
+  assert.ok(avatar && Number(avatar[1]) >= 104, `site avatar should be >= 104px, got ${avatar && avatar[1]}`);
+  const r = readFileSync(join(dist, 'resume', 'index.html'), 'utf8');
+  const photo = r.match(/\.photo[^{,]*\{[^}]*width:\s*(\d+)mm/);
+  assert.ok(photo && Number(photo[1]) >= 32, `resume photo should be >= 32mm, got ${photo && photo[1]}`);
+});
