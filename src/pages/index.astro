@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import RmseChart from '../components/RmseChart.astro';
-import { profile, education, featured, others } from '../data/profile';
+import { profile, education, activities, featured, others } from '../data/profile';
 
 const fmt = (v: number) => v.toLocaleString('en-US', { minimumFractionDigits: 2 });
 const first = featured.rmse[0];
@@ -50,6 +50,20 @@ const githubLabel = profile.github.replace('https://', '');
                 <span class="meta">{e.period}</span>
               </div>
               <p class="entry-sub">{e.major}</p>
+            </div>
+          ))}
+        </section>
+
+        <section class="block">
+          <h2>Activities</h2>
+          {activities.map((a) => (
+            <div class="entry">
+              <div class="entry-head">
+                <span class="entry-title">{a.name}</span>
+                <span class="meta">{a.period}</span>
+              </div>
+              <p class="entry-sub">{a.sub}</p>
+              <ul class="entry-points">{a.points.map((p) => <li>{p}</li>)}</ul>
             </div>
           ))}
         </section>

@@ -70,6 +70,7 @@ h4 { font-size: 17px; margin: 28px 0 6px; }
 .entry-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; }
 .entry-title { font-size: 17px; font-weight: 700; }
 .entry-sub { margin: 2px 0 0; color: var(--muted); }
+.entry-points { margin: 6px 0 0; font-size: 15px; }
 
 /* 프로젝트 토글 */
 .project { border: 1px solid var(--line); border-radius: 10px; margin: 0 0 14px; background: var(--bg); }

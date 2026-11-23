@@ -155,3 +155,13 @@ test('Education section sits above Projects', () => {
     assert.ok(html.includes(s), `missing ${s}`);
   }
 });
+
+test('Activities section lists IBA between Education and Projects', () => {
+  const at = html.search(/<h2[^>]*>Activities<\/h2>/);
+  assert.ok(at > html.search(/<h2[^>]*>Education<\/h2>/), 'Activities missing or above Education');
+  assert.ok(at < html.search(/<h2[^>]*>Projects<\/h2>/), 'Activities should come before Projects');
+  for (const s of ['Intelligent Business Analytics (IBA)', '지능형 경영 분석 학회', '2026.08 ~', '12th Cohort Member']) {
+    assert.ok(html.includes(s), `missing ${s}`);
+  }
+  assert.ok(!html.includes('KEEPER'), 'KEEPER should not be listed');
+});
