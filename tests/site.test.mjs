@@ -138,3 +138,11 @@ test('interests describe the decision-support analyst goal', () => {
   assert.ok(aside.includes('경영진의 의사결정을 돕는 데이터 분석가'), 'sidebar missing career goal sentence');
   assert.ok(!aside.includes('대회형 실험 운영'), 'old project-centric interest still present');
 });
+
+test('sidebar lists Skills under interests', () => {
+  const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)[1];
+  const at = aside.search(/<h2[^>]*>Skills<\/h2>/);
+  assert.ok(at > aside.indexOf('관심 분야'), 'Skills heading missing or not below 관심 분야');
+  const tags = [...aside.slice(at).matchAll(/<li[^>]*>([^<]+)<\/li>/g)].map((m) => m[1]);
+  assert.deepEqual(tags, ['Python', 'ML', 'C/C++', 'CSS/HTML/JavaScript']);
+});

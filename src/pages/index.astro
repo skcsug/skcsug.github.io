@@ -35,7 +35,9 @@ const githubLabel = profile.github.replace('https://', '');
         <h2>관심 분야</h2>
         <p class="goal">{profile.goal}</p>
         <ul class="interests">{profile.interests.map((i) => <li>{i}</li>)}</ul>
-        <ul class="tags">{profile.stack.map((s) => <li>{s}</li>)}</ul>
+
+        <h2>Skills</h2>
+        <ul class="tags">{profile.skills.map((s) => <li>{s}</li>)}</ul>
       </aside>
 
       <main class="content">

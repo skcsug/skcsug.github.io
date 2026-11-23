@@ -11,7 +11,7 @@ export const profile = {
     '예측과 분석 — 머신러닝 예측과 통계 분석으로 선택지별 결과와 위험을 숫자로 보여주는 일',
     '전달과 제안 — 분석 결과를 시각화·요약하여 다음 의사결정에 관해 조언하는 일',
   ],
-  stack: ['Python', 'pandas', 'scikit-learn', 'LightGBM', 'XGBoost', 'CatBoost', 'matplotlib', 'Git / GitHub'],
+  skills: ['Python', 'ML', 'C/C++', 'CSS/HTML/JavaScript'],
   // 이력서 PDF를 public/resume.pdf에 넣은 뒤 '/resume.pdf'로 바꾸면 버튼이 켜집니다.
   resumeUrl: null as string | null,
 };
