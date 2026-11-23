@@ -54,7 +54,7 @@ test('RMSE chart plots all 27 submissions', () => {
 });
 
 // 팀원 이름은 저장소에 평문으로 남기지 않으려고 SHA-256 해시로만 보관합니다. [글자 수, 해시]
-const FORBIDDEN = [[2,"08e8d86e6b074d1bc438460eed54a694306f211fe17bd130dbf432f23db8fefd"],[2,"5cf945b0f75f08f5f5d52448b4c2698310545de38ae177500b741b9cc69edc04"],[4,"6c5d0db00d8984439ad05b670808324300ce97c5f273c5016e2002153d69bbb3"],[5,"982c99bacfb7c475a80cdc7236b75e4080752db5494392a3135f2c288b941e0d"],[5,"cc5953191f316aee20130656f066831e8ff60ae58a0bd4bfbbba2909d9239c71"]];
+const FORBIDDEN = [[2,"08e8d86e6b074d1bc438460eed54a694306f211fe17bd130dbf432f23db8fefd"],[2,"5cf945b0f75f08f5f5d52448b4c2698310545de38ae177500b741b9cc69edc04"],[4,"6c5d0db00d8984439ad05b670808324300ce97c5f273c5016e2002153d69bbb3"],[5,"982c99bacfb7c475a80cdc7236b75e4080752db5494392a3135f2c288b941e0d"],[5,"cc5953191f316aee20130656f066831e8ff60ae58a0bd4bfbbba2909d9239c71"],[3,"5ba2455c833d6ed3c0aac55d0582d5f7a60c83596bd2136ece9d4c82ec275a65"],[3,"93d0b5f665a83a08d3a932b40d95a1ad86b24e212e84fe0e25a5c0270712f88c"],[3,"66d94387569600795c8bd852d6a7e4c3301d58ebff92f47a18eaa75f94401ce2"],[3,"50db583bc523875bbfcaa5aee000e648976b4224a91e9caaf7d26da3f8635500"]];
 const sha = (t) => createHash('sha256').update(t).digest('hex');
 const findForbidden = (text) => {
   const lower = text.toLowerCase();
@@ -88,11 +88,13 @@ test('copy states submission counts accurately', () => {
   assert.ok(!html.includes('좌우했습니다'), 'problem statement overstates imputation impact');
 });
 
-test('OIBC card attributes the 4.2% to the right steps', () => {
-  assert.ok(html.includes('눈 보정'), 'missing 눈 보정 in OIBC summary');
-  assert.ok(!html.includes('시드 앙상블로 검증 페널티'), 'seed ensemble credited with the penalty drop');
+test('OIBC section uses the retrospective numbers', () => {
+  const body = html.split('OIBC 경진대회')[1].split('</details>')[0];
+  for (const t of ['253개', '82%', '+2,394만 원', '6,468,895,230', '15.9%', 'GFS', 'CAMS', '80%']) {
+    assert.ok(body.includes(t), `OIBC body missing ${t}`);
+  }
+  assert.ok(!body.includes('4.2%'), 'old interim 4.2% figure still shown');
 });
-
 test('chart text is enlarged on phones', () => {
   const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n')
     + [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]).join('\n');
