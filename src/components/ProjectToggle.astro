@@ -8,7 +8,7 @@ interface Props {
     problem: string;
     role: string[];
     tech: string[];
-    stats: { value: string; label: string }[];
+    stats: { value: string; label: string; short: string }[];
     rmse?: { n: number; rmse: number }[];
     finalN?: number;
   };
@@ -30,7 +30,7 @@ const { item } = Astro.props;
     <h4>결과</h4>
     <div class="stats">
       {item.stats.map((st, i) => (
-        <div class={i === 0 ? 'stat best' : 'stat'} title={st.label} aria-label={`${st.label}: ${st.value}`}><b>{st.value}</b></div>
+        <div class={i === 0 ? 'stat best' : 'stat'} title={st.label} aria-label={`${st.label}: ${st.value}`}><b>{st.value}</b><span class="stat-label">{st.short}</span></div>
       ))}
     </div>
     {item.rmse && item.finalN && <RmseChart points={item.rmse} finalN={item.finalN} />}

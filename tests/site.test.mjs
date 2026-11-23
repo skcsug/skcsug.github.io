@@ -230,7 +230,7 @@ test('project toggle titles are the short names', () => {
   assert.deepEqual(titles, ['IBA ML 회귀 토이 프로젝트', 'IBA ML 분류 토이 프로젝트', 'OIBC 경진대회']);
 });
 
-test('every project result is bare numbers with no visible labels', () => {
+test('every result number has a short one-line label', () => {
   const bodies = [...html.matchAll(/<\/summary>([\s\S]*?)<\/details>/g)].map((m) => m[1]);
   assert.equal(bodies.length, 3);
   for (const body of bodies) {
@@ -242,9 +242,14 @@ test('every project result is bare numbers with no visible labels', () => {
     const tiles = [...result.matchAll(/<div class="stat(?: best)?"([^>]*)>([\s\S]*?)<\/div>/g)];
     assert.ok(tiles.length >= 3, `expected >=3 number tiles, got ${tiles.length}`);
     for (const [, attrs, inner] of tiles) {
-      assert.ok(!/<span/.test(inner), 'tile should not show a label');
-      assert.ok(/title="[^"]+"/.test(attrs), 'tile should keep its meaning as a hover title');
-      assert.ok(/\d/.test(inner.replace(/<[^>]+>/g, '')), 'tile value should be a number');
+      assert.ok(/title="[^"]+"/.test(attrs), 'tile should keep the long explanation as a hover title');
+      const value = inner.match(/<b[^>]*>([^<]+)<\/b>/);
+      assert.ok(value && /\d/.test(value[1]), 'tile value should be a number');
+      const label = inner.match(/<span class="stat-label"[^>]*>([^<]+)<\/span>/);
+      assert.ok(label, `tile ${value && value[1]} has no short label`);
+      const text = label[1].trim();
+      assert.ok(text.length <= 16, `label too long (${text.length}): ${text}`);
+      assert.ok(!/[()]/.test(text), `label should be one plain phrase: ${text}`);
     }
   }
 });

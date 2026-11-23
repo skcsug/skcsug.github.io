@@ -65,10 +65,10 @@ const fmtRmse = (v: number) => v.toLocaleString('en-US', { minimumFractionDigits
 const firstRmse = featured.rmse[0].rmse;
 const finalRmse = featured.rmse.find((p) => p.n === featured.finalN)!.rmse;
 export const featuredStats = [
-  { value: fmtRmse(finalRmse), label: `최종 선택 #${featured.finalN} Public RMSE (첫 제출 ${fmtRmse(firstRmse)})` },
-  { value: `−${(((firstRmse - finalRmse) / firstRmse) * 100).toFixed(1)}%`, label: 'RMSE 개선 폭' },
-  { value: featured.r2, label: '최종 R²' },
-  { value: `${featured.totalSubmissions}회`, label: '팀 전체 제출' },
+  { value: fmtRmse(finalRmse), label: `최종 선택 #${featured.finalN} Public RMSE (첫 제출 ${fmtRmse(firstRmse)})`, short: '최종 RMSE' },
+  { value: `−${(((firstRmse - finalRmse) / firstRmse) * 100).toFixed(1)}%`, label: 'RMSE 개선 폭', short: 'RMSE 개선' },
+  { value: featured.r2, label: '최종 R²', short: '최종 R²' },
+  { value: `${featured.totalSubmissions}회`, label: '팀 전체 제출', short: '팀 전체 제출' },
 ];
 
 // Contest 섹션에 보이는 대회
@@ -93,10 +93,10 @@ export const contests = [
       'GitHub PR 협업, 클라우드 VM·원격 데스크톱 병렬 실험',
     ],
     stats: [
-      { value: '+2,394만 원', label: '첫 제출 대비 정산금 (11/12 기준)' },
-      { value: '−15.9%', label: '내부 검증 페널티 (3년 합)' },
-      { value: '+1,134만 원', label: '외부 예보 GFS·GEFS 추가 효과' },
-      { value: '+507만 원', label: '2단계 보정 효과' },
+      { value: '+2,394만 원', label: '첫 제출 대비 정산금 (11/12 기준)', short: '정산금 증가' },
+      { value: '−15.9%', label: '내부 검증 페널티 (3년 합)', short: '검증 페널티 감소' },
+      { value: '+1,134만 원', label: '외부 예보 GFS·GEFS 추가 효과', short: '외부 예보 추가 효과' },
+      { value: '+507만 원', label: '2단계 보정 효과', short: '2단계 보정 효과' },
     ],
   },
 
@@ -123,10 +123,10 @@ export const otherProjects: typeof contests = [
       '오즈비로 모델 해석, 비용 민감 임계값 최적화',
     ],
     stats: [
-      { value: '0.6667', label: '최종 F1-score (로지스틱 회귀, 31회 제출 중 최고)' },
-      { value: '21종', label: '비교한 ML 모델' },
-      { value: '5 : 1', label: '반영한 오분류 비용 (부실 승인 : 우량 거절)' },
-      { value: '81 · 17 · 102', label: '승인 · 심사역 검토 · 자동 거절 (제출 200명)' },
+      { value: '0.6667', label: '최종 F1-score (로지스틱 회귀, 31회 제출 중 최고)', short: '최종 F1-score' },
+      { value: '21종', label: '비교한 ML 모델', short: '비교한 모델' },
+      { value: '5 : 1', label: '반영한 오분류 비용 (부실 승인 : 우량 거절)', short: '부실 승인 : 우량 거절 비용' },
+      { value: '81 · 17 · 102', label: '승인 · 심사역 검토 · 자동 거절 (제출 200명)', short: '승인 · 검토 · 거절 인원' },
     ],
   },
   // 뜰까말까 — 잠시 숨김. 다시 보이게 하려면 아래 주석(//)을 지우세요.
