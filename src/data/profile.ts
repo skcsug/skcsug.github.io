@@ -91,6 +91,7 @@ export const contests = [
       'GitHub PR 협업, 클라우드 VM·원격 데스크톱 병렬 실험',
     ],
     stats: [
+      { value: '78위', label: '최종 순위: 385팀 중 78위 (상위 약 20%)', short: '385팀 중 상위 20%' },
       { value: '+2,394만 원', label: '첫 제출 대비 정산금 (11/12 기준)', short: '정산금 증가' },
       { value: '−15.9%', label: '내부 검증 페널티 (3년 합)', short: '검증 페널티 감소' },
     ],

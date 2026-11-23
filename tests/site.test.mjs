@@ -296,3 +296,12 @@ test('classification project shows the deck numbers under Projects', () => {
     assert.ok(body.includes(t), `classification project missing ${t}`);
   }
 });
+
+test('OIBC result leads with the final rank', () => {
+  const body = html.split('<span class="ptitle">OIBC 경진대회')[1].split('</details>')[0];
+  const result = body.split(/<h4[^>]*>결과<\/h4>/)[1];
+  const first = result.match(/<div class="stat best"[^>]*><b>([^<]+)<\/b><span class="stat-label">([^<]+)<\/span>/);
+  assert.ok(first, 'no highlighted first tile');
+  assert.equal(first[1], '78위');
+  assert.equal(first[2], '385팀 중 상위 20%');
+});
