@@ -293,7 +293,7 @@ test('hero shows a small photo avatar without EXIF', () => {
 test('link preview (Open Graph) tags point at real files', () => {
   const meta = (p) => (html.match(new RegExp(`<meta[^>]+(?:property|name)="${p}"[^>]+content="([^"]+)"`)) || [])[1];
   assert.equal(meta('og:url'), 'https://skcsug.github.io/');
-  assert.ok(meta('og:title') && meta('og:title').includes('skcsug'), 'og:title missing');
+  assert.ok(meta('og:title'), 'og:title missing');
   assert.ok(meta('og:description') && meta('og:description').includes('데이터로 더 나은 결정을 돕는 분석가'), 'og:description missing');
   assert.ok(meta('twitter:card'), 'twitter:card missing');
   const img = meta('og:image');
@@ -301,12 +301,19 @@ test('link preview (Open Graph) tags point at real files', () => {
   assert.ok(existsSync(join(dist, img.replace('https://skcsug.github.io/', ''))), `og:image file missing: ${img}`);
 });
 
-test('tab icon is the custom S icon, not the Astro default', () => {
+test('tab icon is the handwritten JHC monogram', () => {
   const svg = readFileSync(join(dist, 'favicon.svg'), 'utf8');
-  assert.ok(/<text[^>]*>S<\/text>/.test(svg), 'favicon.svg should draw an S');
+  assert.ok(/<title>JHC<\/title>/.test(svg), 'favicon.svg should be the JHC monogram');
+  assert.ok((svg.match(/<path /g) || []).length >= 6, 'monogram should be drawn as hand strokes');
+  assert.ok(!/>S</.test(svg), 'old S icon should be gone');
   assert.ok(/<link[^>]+rel="icon"[^>]+href="\/favicon\.svg"/.test(html), 'svg icon link missing');
   const png = html.match(/<link[^>]+rel="(?:icon|apple-touch-icon)"[^>]+href="(\/[^"]+\.png)"/);
   assert.ok(png && existsSync(join(dist, png[1])), 'png icon fallback missing');
+});
+
+test('browser tab and link preview read 정현찬', () => {
+  assert.equal((html.match(/<title>([^<]+)<\/title>/) || [])[1], '정현찬 · 포트폴리오');
+  assert.ok(/property="og:title" content="정현찬 · 포트폴리오"/.test(html));
 });
 
 test('resume page has the reference sections and verified numbers', () => {

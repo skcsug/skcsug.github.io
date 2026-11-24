@@ -1,4 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <circle cx="32" cy="32" r="32" fill="#2563eb"/>
-  <text x="32" y="44" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="36" font-weight="700" fill="#ffffff">S</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="370 215 420 460">
+  <title>JHC</title>
+  <rect x="370" y="215" width="420" height="460" fill="#ffffff"/>
+  <g fill="none" stroke="#111111" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
+    <!-- J: 오른쪽으로 올라가는 윗줄 + 아래에서 왼쪽으로 말리는 갈고리 -->
+    <path d="M 395 318 C 450 312, 540 278, 582 250"/>
+    <path d="M 503 282 C 516 350, 520 398, 500 424 C 476 452, 442 444, 432 362"/>
+    <!-- H: 왼쪽 기둥, 휘어진 가로획, 오른쪽 기둥 -->
+    <path d="M 520 364 C 535 420, 547 482, 556 550"/>
+    <path d="M 541 430 C 572 430, 604 402, 615 380"/>
+    <path d="M 615 352 C 625 420, 638 482, 648 538"/>
+    <!-- C: 오른쪽 아래로 내려앉은 곡선 -->
+    <path d="M 724 446 C 725 424, 704 424, 690 450 C 660 502, 650 582, 666 620 C 682 652, 742 654, 762 632"/>
+  </g>
 </svg>
