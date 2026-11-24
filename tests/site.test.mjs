@@ -301,10 +301,11 @@ test('link preview (Open Graph) tags point at real files', () => {
   assert.ok(existsSync(join(dist, img.replace('https://skcsug.github.io/', ''))), `og:image file missing: ${img}`);
 });
 
-test('tab icon is the handwritten JHC monogram', () => {
+test('tab icon is the serif JHC monogram', () => {
   const svg = readFileSync(join(dist, 'favicon.svg'), 'utf8');
   assert.ok(/<title>JHC<\/title>/.test(svg), 'favicon.svg should be the JHC monogram');
-  assert.ok((svg.match(/<path /g) || []).length >= 6, 'monogram should be drawn as hand strokes');
+  assert.equal((svg.match(/<path /g) || []).length, 3, 'one filled outline per letter J, H, C');
+  assert.ok(/Playfair Display/.test(svg) && !/stroke-width/.test(svg), 'serif letter outlines (Playfair Display), not hand-drawn strokes');
   assert.ok(!/>S</.test(svg), 'old S icon should be gone');
   assert.ok(!/skewX|rotate\(/.test(svg), 'monogram should stand upright');
   assert.ok(!/<rect/.test(svg), 'background should be transparent');
