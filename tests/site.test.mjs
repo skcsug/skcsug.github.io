@@ -305,7 +305,7 @@ test('tab icon is the serif JHC monogram', () => {
   const svg = readFileSync(join(dist, 'favicon.svg'), 'utf8');
   assert.ok(/<title>JHC<\/title>/.test(svg), 'favicon.svg should be the JHC monogram');
   assert.equal((svg.match(/<path /g) || []).length, 3, 'one filled outline per letter J, H, C');
-  assert.ok(/Playfair Display/.test(svg) && !/stroke-width/.test(svg), 'serif letter outlines (Playfair Display), not hand-drawn strokes');
+  assert.ok(/Libre Baskerville/.test(svg) && !/stroke-width/.test(svg), 'serif letter outlines (Libre Baskerville), not hand-drawn strokes');
   assert.ok(!/>S</.test(svg), 'old S icon should be gone');
   assert.ok(!/skewX|rotate\(/.test(svg), 'monogram should stand upright');
   assert.ok(!/<rect/.test(svg), 'background should be transparent');
