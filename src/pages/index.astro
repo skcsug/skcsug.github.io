@@ -119,8 +119,9 @@ const githubLabel = profile.github.replace('https://', '');
 
         <section class="block contact" id="contact">
           <h2 class="section-gap">Contact</h2>
-          <p><a href={`mailto:${profile.email}`}>{profile.email}</a></p>
-          <p class="muted-line">GitHub <a href={profile.github}>{githubLabel}</a> · <a href={profile.resumeUrl ?? '#'} download>이력서 PDF</a></p>
+          <p class="contact-line"><span>Resume:</span> <a href={profile.resumeUrl ?? '#'} download>이력서 PDF</a></p>
+          <p class="contact-line"><span>Email:</span> <a href={`mailto:${profile.email}`}>{profile.email}</a></p>
+          <p class="contact-line"><span>GitHub:</span> <a href={profile.github}>{githubLabel}</a></p>
         </section>
 
         <footer>

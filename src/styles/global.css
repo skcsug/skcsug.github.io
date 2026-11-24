@@ -143,8 +143,8 @@ figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
 .chart .label { fill: var(--text); font-size: 13px; font-weight: 600; }
 
 
-.contact p { margin: 0 0 4px; }
-.muted-line { color: var(--muted); font-size: 14px; }
+.contact-line { margin: 0 0 4px; font-size: 14px; }
+.contact-line span { color: var(--muted); display: inline-block; min-width: 68px; }
 footer { margin-top: 32px; color: var(--muted); font-size: 14px; }
 
 @media (max-width: 860px) {

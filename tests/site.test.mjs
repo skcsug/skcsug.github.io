@@ -473,8 +473,11 @@ test('sticky index menu links to real sections', () => {
   assert.ok(/\.site-nav\{[^}]*position:sticky/.test(css), 'menu should stay visible while scrolling');
 });
 
-test('contact section shows the address and a mail link', () => {
+test('contact lists Resume, Email, GitHub in one uniform style', () => {
   const c = html.match(/<section[^>]*id="contact"[^>]*>([\s\S]*?)<\/section>/);
   assert.ok(c, 'contact section missing');
-  assert.ok(/href="mailto:guscks728@naver\.com"[^>]*>guscks728@naver\.com</.test(c[1]), 'email should be visible and clickable');
+  const lines = [...c[1].matchAll(/<p class="contact-line"[^>]*>([\s\S]*?)<\/p>/g)].map((m) => m[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim());
+  assert.deepEqual(lines, ['Resume: 이력서 PDF', 'Email: guscks728@naver.com', 'GitHub: github.com/skcsug']);
+  assert.ok(/href="mailto:guscks728@naver\.com"/.test(c[1]), 'email should stay clickable');
+  assert.ok(/href="\/resume\.pdf"[^>]*download/.test(c[1]), 'resume should download');
 });
