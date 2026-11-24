@@ -95,7 +95,7 @@ h4 { font-size: 15px; margin: 22px 0 6px; }
 .highlights td a:first-child { color: var(--text); }
 .highlights td a:hover { color: var(--accent); }
 .highlights .muted { color: var(--muted); white-space: nowrap; }
-.highlights b { color: var(--accent); }
+.highlights .demo-link { color: var(--accent); }
 
 /* 분석 사례 */
 .case-title { margin: 0 0 10px; font-weight: 600; }
@@ -152,7 +152,6 @@ footer { margin-top: 32px; color: var(--muted); font-size: 14px; }
   .highlights td { display: inline; padding: 0; border: 0; }
   .highlights td:first-child { display: block; font-weight: 600; margin-bottom: 2px; }
   .highlights td.muted { font-size: 13px; margin-right: 8px; }
-  .highlights td:last-child { display: block; margin-top: 2px; }
   .case-steps { grid-template-columns: 36px minmax(0, 1fr); font-size: 14px; }
   .stats { grid-template-columns: 1fr 1fr; gap: 16px; }
   .stat b { font-size: 22px; }

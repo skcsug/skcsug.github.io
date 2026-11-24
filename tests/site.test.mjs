@@ -427,8 +427,10 @@ test('Highlights table sits right after the hero and links each project', () => 
   const table = html.slice(at).match(/<table class="highlights"[^>]*>([\s\S]*?)<\/table>/)[1];
   const rows = [...table.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/g)].map((m) => m[1]).filter((r) => r.includes('<td'));
   assert.equal(rows.length, 3);
-  assert.ok(rows[0].includes('OIBC 경진대회') && rows[0].includes('385팀 중 78위'), 'strongest result (OIBC) should lead');
-  for (const t of ['F1 0.6667', 'RMSE −5.3%']) assert.ok(table.includes(t), `Highlights missing ${t}`);
+  assert.ok(rows[0].includes('OIBC 경진대회'), 'OIBC should lead');
+  const heads = [...table.matchAll(/<th[^>]*>([^<]*)<\/th>/g)].map((m) => m[1].trim());
+  assert.deepEqual(heads, ['프로젝트', '기간', '팀'], 'no result column in Highlights');
+  for (const t of ['385팀 중 78위', 'F1 0.6667', 'RMSE −5.3%']) assert.ok(!table.includes(t), `Highlights should not show ${t}`);
   assert.ok(/href="\/credit-demo\/"/.test(table), 'Highlights should link the demo');
   const ids = [...html.matchAll(/<article class="project"[^>]*id="([^"]+)"/g)].map((m) => m[1]);
   for (const id of ids) assert.ok(table.includes(`href="#${id}"`), `Highlights should link #${id}`);

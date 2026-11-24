@@ -61,17 +61,13 @@ const githubLabel = profile.github.replace('https://', '');
         <section class="block">
           <h2>Highlights</h2>
           <table class="highlights">
-            <thead><tr><th>프로젝트</th><th>기간</th><th>팀</th><th>핵심 결과</th></tr></thead>
+            <thead><tr><th>프로젝트</th><th>기간</th><th>팀</th></tr></thead>
             <tbody>
               {highlights.map((h) => (
                 <tr>
-                  <td><a href={`#${h.id}`}>{h.title}</a></td>
+                  <td><a href={`#${h.id}`}>{h.title}</a>{h.demo && <> · <a class="demo-link" href={h.demo}>데모</a></>}</td>
                   <td class="muted">{h.period}</td>
                   <td class="muted">{h.team}</td>
-                  <td>
-                    <b>{h.highlight}</b>
-                    {h.demo && <> · <a href={h.demo}>데모</a></>}
-                  </td>
                 </tr>
               ))}
             </tbody>
