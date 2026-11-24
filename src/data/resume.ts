@@ -81,7 +81,7 @@ export const projects = [
   {
     name: '영국 중고차 가격 예측',
     period: '2026.11',
-    summary: 'IBA 회귀 대회, 3명 팀의 팀 리드',
+    summary: 'IBA 회귀 대회, 3명 팀의 팀장',
     badge: 'RMSE −5.3%',
     stack: 'Python, pandas, scikit-learn, LightGBM, XGBoost, CatBoost, Git(PR 협업)',
     sections: [

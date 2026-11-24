@@ -8,7 +8,7 @@ test('page shows required assignment content', () => {
   for (const s of [
     'skcsug',
     'github.com/skcsug',
-    'IBA ML 회귀 토이 프로젝트',
+    '중고차 가격 예측 (IBA 회귀 대회)',
     '문제 정의',
     '역할',
     '기술',
@@ -131,8 +131,7 @@ test('projects are closed toggles showing only the title', () => {
   assert.equal(toggles.length, 3, 'expected 3 project toggles');
   for (const [, attrs, summary] of toggles) {
     assert.ok(!/\bopen\b/.test(attrs), 'toggles should start closed');
-    const text = summary.replace(/<[^>]+>/g, '').trim();
-    assert.ok(!/대표|·/.test(text), `summary should be the title only, got: ${text}`);
+    assert.ok(/^\s*<span class="ptitle"[^>]*>[^<]+<\/span>\s*$/.test(summary), `summary should hold only the title, got: ${summary}`);
   }
 });
 
@@ -228,7 +227,7 @@ test('project titles use the same plain 16px text as Education rows', () => {
 
 test('project toggle titles are the short names', () => {
   const titles = [...html.matchAll(/<summary[^>]*>([\s\S]*?)<\/summary>/g)].map((m) => m[1].replace(/<[^>]+>/g, '').trim());
-  assert.deepEqual(titles, ['IBA ML 회귀 토이 프로젝트', 'IBA ML 분류 토이 프로젝트', 'OIBC 경진대회']);
+  assert.deepEqual(titles, ['중고차 가격 예측 (IBA 회귀 대회)', '대출 부실 예측 · 승인 정책 설계 (German Credit)', 'OIBC 경진대회']);
 });
 
 test('every result number has a short one-line label', () => {
@@ -255,7 +254,7 @@ test('every result number has a short one-line label', () => {
   }
 });
 test('IBA result tiles show the verified leaderboard numbers', () => {
-  const body = html.split('<span class="ptitle">IBA ML 회귀 토이 프로젝트')[1].split('</details>')[0];
+  const body = html.split('<span class="ptitle">중고차 가격 예측 (IBA 회귀 대회)')[1].split('</details>')[0];
   for (const t of ['2,010.31', '2,122.44', '−5.3%', '0.9563']) assert.ok(body.includes(t), `IBA missing ${t}`);
   assert.ok(!/<b>31회<\/b>/.test(body), '31회 tile should be removed');
 });
@@ -288,7 +287,7 @@ test('each toggle group closes with its own bottom line', () => {
 
 test('classification project shows the deck numbers under Projects', () => {
   const proj = html.slice(html.search(/<h2[^>]*>Projects<\/h2>/), html.search(/<h2[^>]*>Contest<\/h2>/));
-  const body = proj.split('<span class="ptitle">IBA ML 분류 토이 프로젝트')[1];
+  const body = proj.split('<span class="ptitle">대출 부실 예측 · 승인 정책 설계 (German Credit)')[1];
   assert.ok(body, 'classification toggle missing under Projects');
   assert.ok(!/<b>5 : 1<\/b>/.test(body) && !/<b>81 · 17 · 102<\/b>/.test(body), 'removed classification tiles still shown');
   assert.ok(/<b>21종<\/b><span class="stat-label">비교한 모델 수<\/span>/.test(body), '21종 label should read 비교한 모델 수');
@@ -385,7 +384,7 @@ test('profile photo is larger and high enough resolution', () => {
 test('sidebar links read just GitHub and Resume, avatar matches resume size', () => {
   const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)[1];
   const btns = [...aside.matchAll(/<a class="btn"[^>]*>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-  assert.deepEqual(btns, ['GitHub', 'Resume', 'Email']);
+  assert.deepEqual(btns, ['GitHub', 'Resume', 'guscks728@naver.com']);
   assert.ok(/<a class="btn" href="mailto:guscks728@naver\.com"/.test(aside), 'Email should be a mailto link');
   const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n');
   const avatar = css.match(/\.avatar\{[^}]*width:(\d+)px/);
@@ -407,4 +406,10 @@ test('retrospective page keeps the numbers and uses a formal written register', 
   const text = r.replace(/<[^>]+>/g, ' ');
   assert.equal((text.match(/습니다/g) || []).length, 0, 'retrospective should use 평서체 (~했다/~이다), not 합니다체');
   assert.ok(!/<del>/.test(r), 'ranges like 1~2 must not turn into strikethrough');
+});
+
+test('roles say 팀장 consistently on the site and the resume', () => {
+  const r = readFileSync(join(dist, 'resume', 'index.html'), 'utf8');
+  assert.ok(!html.includes('팀 리드') && !r.includes('팀 리드'), '팀 리드 should read 팀장');
+  assert.ok(!html.includes('토이 프로젝트'), 'titles should not undersell as 토이 프로젝트');
 });
