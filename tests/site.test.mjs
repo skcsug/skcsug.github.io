@@ -438,7 +438,7 @@ test('Highlights table sits right after the hero and links each project', () => 
 
 test('each project has an analysis case with 문제 → 원인 → 판단 → 조치 → 결과 and a comparison table', () => {
   const cases = {
-    'OIBC 경진대회': ['−25.8%', '80%', '86~89%'],
+    'OIBC 경진대회': ['2단계 보정', '−2.45%', '−3.98%', '5,066,852원'],
     '대출 부실 예측 · 승인 정책 설계 (German Credit)': ['190/200', '0.6522', '0.6667'],
     '중고차 가격 예측 (IBA 회귀 대회)': ['2,036.15', '2,036.36', '2,013.53'],
   };
@@ -451,4 +451,10 @@ test('each project has an analysis case with 문제 → 원인 → 판단 → �
     assert.ok(/<table class="case-table"/.test(c), `${title}: comparison table missing`);
     for (const n of nums) assert.ok(c.includes(n), `${title}: case missing ${n}`);
   }
+});
+
+test('OIBC case is about modeling, not external data', () => {
+  const body = html.split('<span class="ptitle">OIBC 경진대회')[1].split('</article>')[0];
+  const c = body.split(/<h4[^>]*>분석 사례<\/h4>/)[1];
+  for (const t of ['CAMS', 'AnEn', '−25.8%']) assert.ok(!c.includes(t), `OIBC case should not be about ${t}`);
 });
