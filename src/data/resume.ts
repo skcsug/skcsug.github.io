@@ -8,7 +8,7 @@ export const header = {
   name: '정현찬',
   role: '데이터 분석가',
   school: '부산대학교 정보컴퓨터공학부 컴퓨터공학전공 재학',
-  schoolNote: '(편입, 2028.08 졸업 예정)',
+  schoolNote: '(일반편입, 2028.08 졸업 예정)',
   intro: [
     '데이터로 더 나은 결정을 돕는 분석가를 목표로 합니다.',
     '데이터 분석에서 멈추지 않고, 경영 의사결정에 바로 쓸 수 있는 제언까지 만듭니다.',
@@ -109,7 +109,7 @@ export const projects = [
 
 export const tables = {
   education: [
-    { left: '부산대학교 정보컴퓨터공학부 컴퓨터공학전공 편입', right: '2026.03 ~ 2028.08 예정' },
+    { left: '부산대학교 정보컴퓨터공학부 컴퓨터공학전공 일반편입', right: '2026.03 ~ 2028.08 예정' },
     { left: '전남대학교 소프트웨어공학과(GPA 4.06/4.5)', right: '2021.03 ~ 2026.02' },
   ],
   activities: [{ left: 'IBA(Intelligent Business Analytics) 지능형 경영 분석 학회 12기', right: '2026.08 ~' }],

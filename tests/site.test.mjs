@@ -169,7 +169,7 @@ test('Education sits right above Contact, resume-style in Korean: 학력·활동
   const heads = (h) => [...h.matchAll(/<h3[^>]*>([^<]+)<\/h3>/g)].map((m) => m[1].trim());
   assert.deepEqual(heads(left[1]), ['학력', '활동']);
   assert.deepEqual(heads(right[1]), ['자격증']);
-  for (const t of ['부산대학교 정보컴퓨터공학부 컴퓨터공학전공 편입', '2026.03 ~ 2028.08 예정', '전남대학교 소프트웨어공학과(GPA 4.06/4.5)', '2021.03 ~ 2026.02', '지능형 경영 분석 학회 12기']) {
+  for (const t of ['부산대학교 정보컴퓨터공학부 컴퓨터공학전공 일반편입', '2026.03 ~ 2028.08 예정', '전남대학교 소프트웨어공학과(GPA 4.06/4.5)', '2021.03 ~ 2026.02', '지능형 경영 분석 학회 12기']) {
     assert.ok(left[1].includes(t), `left column missing ${t}`);
   }
   for (const t of ['TOEIC', '980/990']) assert.ok(right[1].includes(t), `right column missing ${t}`);
@@ -467,4 +467,13 @@ test('contact lists Resume, Email, GitHub in one uniform style', () => {
   assert.deepEqual(lines, ['Resume: 이력서 PDF', 'Email: guscks728@naver.com', 'GitHub: github.com/skcsug']);
   assert.ok(/href="mailto:guscks728@naver\.com"/.test(c[1]), 'email should stay clickable');
   assert.ok(/href="\/resume\.pdf"[^>]*download/.test(c[1]), 'resume should download');
+});
+
+test('transfer is written as 일반편입 on site and resume', () => {
+  const r = readFileSync(join(dist, 'resume', 'index.html'), 'utf8');
+  for (const doc of [html, r]) {
+    const plain = doc.replace(/일반편입/g, '');
+    assert.ok(!plain.includes('편입'), 'bare 편입 should read 일반편입');
+  }
+  assert.ok(r.includes('(일반편입, 2028.08 졸업 예정)'));
 });
