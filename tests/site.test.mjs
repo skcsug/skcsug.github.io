@@ -124,7 +124,8 @@ test('hero header shows the headline, nickname and links first', () => {
   const h1 = head[1].match(/<h1[^>]*>([\s\S]*?)<\/h1>/)[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
   assert.equal(h1, '데이터로 더 나은 결정을 돕는 분석가');
   assert.ok(!/정현찬입니다/.test(html), 'no "…, 이름입니다" self-intro pattern');
-  assert.ok(/class="nickname"[^>]*>skcsug</.test(head[1]), 'nickname skcsug should stay visible (assignment)');
+  assert.ok(/class="nickname"[^>]*>정현찬</.test(head[1]), 'name 정현찬 above the headline');
+  assert.ok(html.includes('github.com/skcsug'), 'nickname skcsug should stay visible via GitHub (assignment)');
   assert.ok(html.indexOf('<header class="hero"') < html.indexOf('<aside'), 'hero should come before the sidebar');
   const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)[1];
   assert.ok(aside.includes('관심 분야') && aside.includes('Skills'));
@@ -156,18 +157,22 @@ test('sidebar lists Skills under interests', () => {
   assert.deepEqual(tags, ['Python (pandas · scikit-learn)', 'LightGBM / XGBoost', 'Git']);
 });
 
-test('Education section sits above Projects', () => {
+test('Education sits right above Contact and includes the previous school and TOEIC', () => {
   const edu = html.search(/<h2[^>]*>Education<\/h2>/);
-  assert.ok(edu > -1, 'no Education heading');
-  assert.ok(edu < html.search(/<h2[^>]*>Projects<\/h2>/), 'Education should come before Projects');
+  assert.ok(edu > html.search(/<h2[^>]*>Contest<\/h2>/), 'Education should come after Contest');
+  assert.ok(edu < html.search(/<h2[^>]*>Contact<\/h2>/), 'Education should come right before Contact');
+  const sec = html.slice(edu, html.search(/<h2[^>]*>Contact<\/h2>/));
+  for (const t of ['Chonnam National University', 'Software Engineering', 'GPA 4.06/4.5', '2021.03 ~ 2026.02', 'TOEIC 980/990']) {
+    assert.ok(sec.includes(t), `Education missing ${t}`);
+  }
   for (const s of ['Pusan National University', '2026 ~', 'Computer Science &amp; Engineering']) {
     assert.ok(html.includes(s), `missing ${s}`);
   }
 });
 
-test('Activities section lists IBA between Education and Projects', () => {
+test('Activities sits between Highlights and Projects', () => {
   const at = html.search(/<h2[^>]*>Activities<\/h2>/);
-  assert.ok(at > html.search(/<h2[^>]*>Education<\/h2>/), 'Activities missing or above Education');
+  assert.ok(at > html.search(/<h2[^>]*>Highlights<\/h2>/), 'Activities missing or above Highlights');
   assert.ok(at < html.search(/<h2[^>]*>Projects<\/h2>/), 'Activities should come before Projects');
   for (const s of ['Intelligent Business Analytics (IBA)', '지능형 경영 분석 학회', '2026.08 ~', '12th Cohort Member']) {
     assert.ok(html.includes(s), `missing ${s}`);
@@ -464,7 +469,8 @@ test('sticky index menu links to real sections', () => {
   assert.ok(nav, 'index menu missing');
   const links = [...nav[1].matchAll(/<a[^>]*href="#([^"]+)"[^>]*>([^<]+)<\/a>/g)].map((m) => [m[1], m[2].trim()]);
   const labels = links.map(([, l]) => l).filter((l) => l !== 'skcsug');
-  assert.deepEqual(labels, ['Highlights', 'Education', 'Projects', 'Contest', 'Contact']);
+  assert.ok(/class="brand"[^>]*>정현찬</.test(nav[1]), 'brand should read 정현찬');
+  assert.deepEqual(labels.filter((l) => l !== '정현찬'), ['Highlights', 'Projects', 'Contest', 'Education', 'Contact']);
   for (const [id] of links) {
     if (id === 'top') continue;
     assert.ok(new RegExp(`id="${id}"`).test(html), `menu target #${id} missing`);

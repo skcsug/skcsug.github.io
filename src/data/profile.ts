@@ -3,6 +3,7 @@
 
 export const profile = {
   nickname: 'skcsug',
+  name: '정현찬',
   tagline: '데이터로 더 나은 결정을 돕는 분석가',
   // 첫 화면 큰 문장 (한 줄 소개와 따로 바꿀 수 있습니다)
   headline: '데이터로 더 나은 결정을 돕는 분석가',
@@ -22,6 +23,8 @@ export const profile = {
 
 export const education = [
   { degree: 'B.S.', major: 'Computer Science & Engineering', school: 'Pusan National University', period: '2026 ~' },
+  { major: 'Software Engineering (GPA 4.06/4.5)', school: 'Chonnam National University', period: '2021.03 ~ 2026.02' },
+  { major: 'TOEIC 980/990' },
 ];
 
 export const activities = [

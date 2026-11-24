@@ -33,21 +33,21 @@ const githubLabel = profile.github.replace('https://', '');
   <body id="top">
     <nav class="site-nav" aria-label="목차">
       <div class="nav-inner">
-        <a class="brand" href="#top">{profile.nickname}</a>
+        <a class="brand" href="#top">{profile.name}</a>
         <div class="nav-links">
           <a href="#highlights">Highlights</a>
-          <a href="#education">Education</a>
           <a href="#projects">Projects</a>
           <a href="#contest">Contest</a>
+          <a href="#education">Education</a>
           <a href="#contact">Contact</a>
         </div>
       </div>
     </nav>
 
     <header class="hero">
-      <div class="avatar"><img src="/profile.jpg" alt={`${profile.nickname} 프로필 사진`} width="120" height="120" /></div>
+      <div class="avatar"><img src="/profile.jpg" alt={`${profile.name} 프로필 사진`} width="120" height="120" /></div>
       <div class="hero-text">
-        <p class="nickname">{profile.nickname}</p>
+        <p class="nickname">{profile.name}</p>
         <h1>{profile.headline}</h1>
         <div class="buttons">
           <a class="btn" href={profile.github}>GitHub</a>
@@ -87,18 +87,6 @@ const githubLabel = profile.github.replace('https://', '');
           </table>
         </section>
 
-        <section class="block" id="education">
-          <h2>Education</h2>
-          <ul class="edu">
-            {education.map((e) => (
-              <li>
-                <span class="edu-degree">{e.degree}, {e.major}</span>
-                <span class="edu-school">{e.school} (<em>{e.period}</em>)</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
         <section class="block" id="activities">
           <h2>Activities</h2>
           <ul class="edu">
@@ -116,6 +104,18 @@ const githubLabel = profile.github.replace('https://', '');
 
         <h2 class="section-gap" id="contest">Contest</h2>
         <div class="project-list">{contests.map((c) => <ProjectArticle item={c} />)}</div>
+
+        <section class="block" id="education">
+          <h2 class="section-gap">Education</h2>
+          <ul class="edu">
+            {education.map((e) => (
+              <li>
+                <span class="edu-degree">{e.degree ? `${e.degree}, ${e.major}` : e.major}</span>
+                {e.school && <span class="edu-school">{e.school} (<em>{e.period}</em>)</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
 
         <section class="block contact" id="contact">
           <h2 class="section-gap">Contact</h2>
