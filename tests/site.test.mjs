@@ -307,7 +307,7 @@ test('OIBC result leads with the final rank', () => {
 
 test('profile shows the new tagline and a small photo avatar', () => {
   const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)[1];
-  assert.ok(aside.includes('데이터로 결정을 설계하는 분석가'), 'new tagline missing');
+  assert.ok(aside.includes('데이터로 더 나은 결정을 돕는 분석가'), 'new tagline missing');
   assert.ok(!html.includes('지망생'), 'old tagline still present');
   const img = aside.match(/<img[^>]+src="\/profile\.jpg"[^>]*>/);
   assert.ok(img, 'avatar photo missing');
@@ -321,7 +321,7 @@ test('link preview (Open Graph) tags point at real files', () => {
   const meta = (p) => (html.match(new RegExp(`<meta[^>]+(?:property|name)="${p}"[^>]+content="([^"]+)"`)) || [])[1];
   assert.equal(meta('og:url'), 'https://skcsug.github.io/');
   assert.ok(meta('og:title') && meta('og:title').includes('skcsug'), 'og:title missing');
-  assert.ok(meta('og:description') && meta('og:description').includes('데이터로 결정을 설계하는 분석가'), 'og:description missing');
+  assert.ok(meta('og:description') && meta('og:description').includes('데이터로 더 나은 결정을 돕는 분석가'), 'og:description missing');
   assert.ok(meta('twitter:card'), 'twitter:card missing');
   const img = meta('og:image');
   assert.ok(img && img.startsWith('https://skcsug.github.io/'), 'og:image must be an absolute site URL');
@@ -357,7 +357,7 @@ test('resume intro uses the agreed four lines', () => {
   const r = readFileSync(join(dist, 'resume', 'index.html'), 'utf8');
   const intro = [...r.match(/<ul class="intro"[^>]*>([\s\S]*?)<\/ul>/)[1].matchAll(/<li[^>]*>([^<]+)<\/li>/g)].map((m) => m[1]);
   assert.deepEqual(intro, [
-    '데이터로 결정을 설계하는 분석가를 목표로 합니다.',
+    '데이터로 더 나은 결정을 돕는 분석가를 목표로 합니다.',
     '데이터 분석에서 멈추지 않고, 경영 의사결정에 바로 쓸 수 있는 제언까지 만듭니다.',
     '팀장으로 프로젝트를 이끌며 분석 파이프라인과 실험 기준을 설계하고, 기록·문서화를 자동화했습니다.',
     '금융(대출 심사), 에너지(태양광 발전량), 중고차 가격 등 다양한 도메인의 데이터를 다뤘습니다.',
@@ -412,4 +412,9 @@ test('roles say 팀장 consistently on the site and the resume', () => {
   const r = readFileSync(join(dist, 'resume', 'index.html'), 'utf8');
   assert.ok(!html.includes('팀 리드') && !r.includes('팀 리드'), '팀 리드 should read 팀장');
   assert.ok(!html.includes('토이 프로젝트'), 'titles should not undersell as 토이 프로젝트');
+});
+
+test('old "결정을 설계하는" wording is gone from site and resume', () => {
+  const r = readFileSync(join(dist, 'resume', 'index.html'), 'utf8');
+  assert.ok(!html.includes('결정을 설계하는') && !r.includes('결정을 설계하는'));
 });

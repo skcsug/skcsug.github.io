@@ -3,7 +3,7 @@
 
 export const profile = {
   nickname: 'skcsug',
-  tagline: '데이터로 결정을 설계하는 분석가',
+  tagline: '데이터로 더 나은 결정을 돕는 분석가',
   github: 'https://github.com/skcsug',
   email: 'guscks728@naver.com',
   goal: '데이터와 머신러닝으로 경영진의 의사결정을 돕는 데이터 분석가를 목표로 합니다.',
