@@ -306,6 +306,11 @@ test('tab icon is the handwritten JHC monogram', () => {
   assert.ok(/<title>JHC<\/title>/.test(svg), 'favicon.svg should be the JHC monogram');
   assert.ok((svg.match(/<path /g) || []).length >= 6, 'monogram should be drawn as hand strokes');
   assert.ok(!/>S</.test(svg), 'old S icon should be gone');
+  assert.ok(!/skewX|rotate\(/.test(svg), 'monogram should stand upright');
+  assert.ok(!/<rect/.test(svg), 'background should be transparent');
+  assert.ok(/prefers-color-scheme:\s*dark/.test(svg), 'strokes should switch colour on dark tab bars');
+  const icon32 = readFileSync(join(dist, 'favicon-32.png'));
+  assert.equal(icon32[25], 6, 'favicon-32.png should be RGBA (transparent background)');
   assert.ok(/<link[^>]+rel="icon"[^>]+href="\/favicon\.svg"/.test(html), 'svg icon link missing');
   const png = html.match(/<link[^>]+rel="(?:icon|apple-touch-icon)"[^>]+href="(\/[^"]+\.png)"/);
   assert.ok(png && existsSync(join(dist, png[1])), 'png icon fallback missing');

@@ -1,13 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <title>JHC</title>
-  <rect width="64" height="64" fill="#ffffff"/>
-  <!-- JHC 모노그램: J의 윗줄이 H로 이어지고, C가 오른쪽 아래로 한 단 내려앉은 사선 구도 -->
-  <g transform="skewX(-10) translate(7 0)" fill="none" stroke="#111111" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M 7 13 L 33 9"/>
-    <path d="M 20 12 V 33 Q 20 41 13.5 41 Q 8 41 8 35"/>
-    <path d="M 27 10 V 46"/>
-    <path d="M 39 17 V 44"/>
-    <path d="M 27 32 L 39 30"/>
-    <path d="M 56 41 A 8 8 0 1 0 56 53"/>
+  <!--
+    JHC 모노그램 — 똑바로 선 모노라인 글자.
+    같은 굵기(6) · 수직/수평 획 · 각진 끝. J의 윗줄이 H의 왼쪽 기둥과 만나고,
+    C는 오른쪽 아래로 한 단 내려앉습니다. 배경은 투명, 다크 모드에서는 흰 획.
+  -->
+  <style>
+    .m { fill: none; stroke: #111111; stroke-width: 6; stroke-linecap: square; stroke-linejoin: miter; }
+    @media (prefers-color-scheme: dark) { .m { stroke: #ffffff; } }
+  </style>
+  <g class="m">
+    <path d="M 6 10 H 30"/>
+    <path d="M 19 10 V 34 A 6.5 6.5 0 0 1 6 34 V 31"/>
+    <path d="M 30 10 V 48"/>
+    <path d="M 42 18 V 48"/>
+    <path d="M 30 32 H 42"/>
+    <path d="M 58.5 40.5 A 8.5 8.5 0 1 0 58.5 52.5"/>
   </g>
 </svg>
