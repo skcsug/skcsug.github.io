@@ -1,6 +1,8 @@
 // 이력서(PDF) 내용은 전부 이 파일에서 고칩니다.
 // 고친 뒤 `npm run resume`을 실행하면 public/resume.pdf가 다시 만들어집니다.
 // 공개 PDF이므로 전화번호는 넣지 않습니다.
+// 프로젝트 이름은 사이트(profile.ts)의 제목을 그대로 가져와 사이트와 이력서가 항상 같게 유지됩니다.
+import { featured, otherProjects, contests } from './profile';
 
 export const header = {
   name: '정현찬',
@@ -22,7 +24,7 @@ export const header = {
 
 export const projects = [
   {
-    name: 'OIBC 2026 Challenge',
+    name: contests[0].title,
     period: '2026.10 ~ 2026.11.13',
     summary: '태양광 발전량 예측 경진대회, 5명 팀의 팀장',
     badge: '385팀 중 78위',
@@ -51,7 +53,7 @@ export const projects = [
     ],
   },
   {
-    name: 'German Credit 대출 부실 예측',
+    name: otherProjects[0].title,
     period: '2026.09',
     summary: 'IBA 분류 과제, 팀장 · 보완 발표 발표자',
     badge: 'F1 0.6667',
@@ -79,9 +81,9 @@ export const projects = [
     ],
   },
   {
-    name: '영국 중고차 가격 예측',
+    name: featured.title,
     period: '2026.11',
-    summary: 'IBA 회귀 대회, 3명 팀의 팀장',
+    summary: '3명 팀의 팀장',
     badge: 'RMSE −5.3%',
     stack: 'Python, pandas, scikit-learn, LightGBM, XGBoost, CatBoost, Git(PR 협업)',
     sections: [
@@ -112,5 +114,5 @@ export const tables = {
   ],
   activities: [{ left: 'IBA(Intelligent Business Analytics) 지능형 경영 분석 학회 12기', right: '2026.08 ~' }],
   language: [{ left: 'TOEIC', right: '980/990' }],
-  contests: [{ left: 'OIBC 2026 Challenge 385팀 중 78위', right: '2026.11' }],
+  contests: [{ left: `${contests[0].title} 385팀 중 78위`, right: '2026.11' }],
 };

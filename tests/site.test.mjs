@@ -155,7 +155,7 @@ test('sidebar lists Skills under interests', () => {
   const at = aside.search(/<h2[^>]*>Skills<\/h2>/);
   assert.ok(at > aside.indexOf('관심 분야'), 'Skills heading missing or not below 관심 분야');
   const tags = [...aside.slice(at).matchAll(/<li[^>]*>([^<]+)<\/li>/g)].map((m) => m[1]);
-  assert.deepEqual(tags, ['Python', 'ML', 'C/C++', 'CSS/HTML/JavaScript']);
+  assert.deepEqual(tags, ['Python (pandas · scikit-learn)', 'LightGBM / XGBoost', 'Git']);
 });
 
 test('Education section sits above Projects', () => {
@@ -417,4 +417,11 @@ test('roles say 팀장 consistently on the site and the resume', () => {
 test('old "결정을 설계하는" wording is gone from site and resume', () => {
   const r = readFileSync(join(dist, 'resume', 'index.html'), 'utf8');
   assert.ok(!html.includes('결정을 설계하는') && !r.includes('결정을 설계하는'));
+});
+
+test('resume project names match the site toggle titles', () => {
+  const r = readFileSync(join(dist, 'resume', 'index.html'), 'utf8');
+  const site = [...html.matchAll(/<span class="ptitle"[^>]*>([^<]+)<\/span>/g)].map((m) => m[1].trim());
+  const resume = [...r.matchAll(/<h2[^>]*>([^<]+)<span/g)].map((m) => m[1].trim());
+  assert.deepEqual([...resume].sort(), [...site].sort());
 });
