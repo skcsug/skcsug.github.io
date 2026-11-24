@@ -1,9 +1,11 @@
 ---
 import '../styles/global.css';
-import ProjectToggle from '../components/ProjectToggle.astro';
+import ProjectArticle from '../components/ProjectArticle.astro';
 import { profile, education, activities, featured, featuredStats, otherProjects, contests } from '../data/profile';
 
 const projects = [{ ...featured, stats: featuredStats }, ...otherProjects];
+// 한눈에 보기: 가장 강한 결과(대회)부터
+const highlights = [...contests, ...otherProjects, featured];
 const githubLabel = profile.github.replace('https://', '');
 ---
 <!doctype html>
@@ -29,11 +31,11 @@ const githubLabel = profile.github.replace('https://', '');
     <meta name="twitter:card" content="summary" />
   </head>
   <body>
-    <div class="layout">
-      <aside class="profile">
-        <div class="avatar"><img src="/profile.jpg" alt={`${profile.nickname} 프로필 사진`} width="120" height="120" /></div>
-        <h1>{profile.nickname}</h1>
-        <p class="tagline">{profile.tagline}</p>
+    <header class="hero">
+      <div class="avatar"><img src="/profile.jpg" alt={`${profile.nickname} 프로필 사진`} width="120" height="120" /></div>
+      <div class="hero-text">
+        <p class="nickname">{profile.nickname}</p>
+        <h1>{profile.headline}</h1>
         <div class="buttons">
           <a class="btn" href={profile.github}>GitHub</a>
           {profile.resumeUrl
@@ -41,7 +43,11 @@ const githubLabel = profile.github.replace('https://', '');
             : <span class="btn disabled" aria-disabled="true">Resume (준비 중)</span>}
           <a class="btn" href={`mailto:${profile.email}`}>{profile.email}</a>
         </div>
+      </div>
+    </header>
 
+    <div class="layout">
+      <aside class="profile">
         <h2>관심 분야</h2>
         <p class="goal">{profile.goal}</p>
         <ul class="interests">{profile.interests.map((i) => <li>{i}</li>)}</ul>
@@ -52,6 +58,26 @@ const githubLabel = profile.github.replace('https://', '');
       </aside>
 
       <main class="content">
+        <section class="block">
+          <h2>Highlights</h2>
+          <table class="highlights">
+            <thead><tr><th>프로젝트</th><th>기간</th><th>팀</th><th>핵심 결과</th></tr></thead>
+            <tbody>
+              {highlights.map((h) => (
+                <tr>
+                  <td><a href={`#${h.id}`}>{h.title}</a></td>
+                  <td class="muted">{h.period}</td>
+                  <td class="muted">{h.team}</td>
+                  <td>
+                    <b>{h.highlight}</b>
+                    {h.demo && <> · <a href={h.demo}>데모</a></>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+
         <section class="block">
           <h2>Education</h2>
           <ul class="edu">
@@ -77,11 +103,10 @@ const githubLabel = profile.github.replace('https://', '');
         </section>
 
         <h2>Projects</h2>
-
-        <div class="toggle-list">{projects.map((p) => <ProjectToggle item={p} />)}</div>
+        <div class="project-list">{projects.map((p) => <ProjectArticle item={p} />)}</div>
 
         <h2 class="section-gap">Contest</h2>
-        <div class="toggle-list">{contests.map((c) => <ProjectToggle item={c} />)}</div>
+        <div class="project-list">{contests.map((c) => <ProjectArticle item={c} />)}</div>
 
         <footer>
           <a href={profile.github}>{githubLabel}</a> · Built with Astro · Hosted on GitHub Pages

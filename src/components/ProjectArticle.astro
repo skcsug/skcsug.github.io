@@ -1,0 +1,58 @@
+---
+// 프로젝트·대회 하나를 항상 펼친 상태로 그립니다:
+// 문제 정의 · 역할 · 기술 · 결과(숫자) · 분석 사례(문제 → 원인 → 판단 → 조치 → 결과 + 비교 표).
+import RmseChart from './RmseChart.astro';
+
+interface Props {
+  item: {
+    id: string;
+    title: string;
+    problem: string;
+    role: string[];
+    tech: string[];
+    stats: { value: string; label: string; short: string }[];
+    rmse?: { n: number; rmse: number }[];
+    finalN?: number;
+    links?: { label: string; href: string }[];
+    case: {
+      title: string;
+      steps: string[][];
+      table: { head: string[]; rows: string[][] };
+    };
+  };
+}
+const { item } = Astro.props;
+---
+<article class="project" id={item.id}>
+  <h3 class="phead"><span class="ptitle">{item.title}</span></h3>
+
+  <h4>문제 정의</h4>
+  <p>{item.problem}</p>
+
+  <h4>역할</h4>
+  <ul>{item.role.map((r) => <li>{r}</li>)}</ul>
+
+  <h4>기술</h4>
+  <ul>{item.tech.map((t) => <li>{t}</li>)}</ul>
+
+  <h4>결과</h4>
+  <div class="stats">
+    {item.stats.map((st, i) => (
+      <div class={i === 0 ? 'stat best' : 'stat'} title={st.label} aria-label={`${st.label}: ${st.value}`}><b>{st.value}</b><span class="stat-label">{st.short}</span></div>
+    ))}
+  </div>
+  {item.rmse && item.finalN && <RmseChart points={item.rmse} finalN={item.finalN} />}
+  {item.links && (
+    <div class="proj-links">{item.links.map((l) => <a href={l.href} download={l.href.endsWith('.pdf') ? '' : undefined}>{l.label} →</a>)}</div>
+  )}
+
+  <h4>분석 사례</h4>
+  <p class="case-title">{item.case.title}</p>
+  <dl class="case-steps">
+    {item.case.steps.map(([k, v]) => (<><dt>{k}</dt><dd>{v}</dd></>))}
+  </dl>
+  <table class="case-table">
+    <thead><tr>{item.case.table.head.map((h) => <th>{h}</th>)}</tr></thead>
+    <tbody>{item.case.table.rows.map((r) => <tr>{r.map((c) => <td>{c}</td>)}</tr>)}</tbody>
+  </table>
+</article>

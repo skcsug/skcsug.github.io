@@ -87,7 +87,7 @@ test('copy states submission counts accurately', () => {
 });
 
 test('OIBC section uses the retrospective numbers', () => {
-  const body = html.split('OIBC 경진대회')[1].split('</details>')[0];
+  const body = html.split('<span class="ptitle">OIBC 경진대회')[1].split('</article>')[0];
   assert.ok(!body.includes('+1,134만') && !body.includes('+507만'), 'removed OIBC tiles still shown');
   for (const t of ['253개', '82%', '+2,394만', '−15.9%', 'GFS', 'CAMS']) {
     assert.ok(body.includes(t), `OIBC body missing ${t}`);
@@ -118,32 +118,30 @@ test('images and svg are constrained to container width', () => {
   assert.ok(/(img|svg)[^{]*\{[^}]*max-width:\s*100%/.test(css), 'no max-width:100% rule for img/svg');
 });
 
-test('profile sits in a left sidebar before the projects', () => {
-  const aside = html.match(/<aside[^>]*class="[^"]*profile[^"]*"[^>]*>([\s\S]*?)<\/aside>/);
-  assert.ok(aside, 'no <aside class="profile">');
-  for (const s of ['skcsug', 'github.com/skcsug', '관심 분야']) assert.ok(aside[1].includes(s), `sidebar missing ${s}`);
-  assert.ok(html.indexOf('<aside') < html.indexOf('Projects'), 'sidebar should come before Projects');
+test('hero header shows the headline, nickname and links first', () => {
+  const head = html.match(/<header class="hero"[^>]*>([\s\S]*?)<\/header>/);
+  assert.ok(head, 'no hero header');
+  const h1 = head[1].match(/<h1[^>]*>([\s\S]*?)<\/h1>/)[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  assert.equal(h1, '데이터로 더 나은 결정을 돕는 분석가');
+  assert.ok(!/정현찬입니다/.test(html), 'no "…, 이름입니다" self-intro pattern');
+  assert.ok(/class="nickname"[^>]*>skcsug</.test(head[1]), 'nickname skcsug should stay visible (assignment)');
+  assert.ok(html.indexOf('<header class="hero"') < html.indexOf('<aside'), 'hero should come before the sidebar');
+  const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)[1];
+  assert.ok(aside.includes('관심 분야') && aside.includes('Skills'));
 });
-
-test('projects are closed toggles showing only the title', () => {
-  assert.ok(/<h2[^>]*>Projects<\/h2>/.test(html), 'no "Projects" heading');
-  const toggles = [...html.matchAll(/<details([^>]*)>\s*<summary[^>]*>([\s\S]*?)<\/summary>/g)];
-  assert.equal(toggles.length, 3, 'expected 3 project toggles');
-  for (const [, attrs, summary] of toggles) {
-    assert.ok(!/\bopen\b/.test(attrs), 'toggles should start closed');
-    assert.ok(/^\s*<span class="ptitle"[^>]*>[^<]+<\/span>\s*$/.test(summary), `summary should hold only the title, got: ${summary}`);
-  }
+test('projects and contest are always expanded articles with a title heading', () => {
+  assert.ok(!/<details/.test(html), 'no collapsed toggles should remain');
+  const arts = [...html.matchAll(/<article class="project"[^>]*id="([^"]+)"[^>]*>\s*<h3[^>]*>\s*<span class="ptitle"[^>]*>([^<]+)<\/span>/g)];
+  assert.equal(arts.length, 3, 'expected 3 expanded project articles with ids');
 });
-
-test('every project body is 문제 정의 → 역할 → 기술 → 결과 only', () => {
-  const bodies = [...html.matchAll(/<\/summary>([\s\S]*?)<\/details>/g)].map((m) => m[1]);
+test('every project body is 문제 정의 → 역할 → 기술 → 결과 → 분석 사례', () => {
+  const bodies = [...html.matchAll(/<article class="project"[^>]*>([\s\S]*?)<\/article>/g)].map((m) => m[1]);
   assert.equal(bodies.length, 3);
   for (const body of bodies) {
     const heads = [...body.matchAll(/<h4[^>]*>([^<]+)<\/h4>/g)].map((m) => m[1].trim());
-    assert.deepEqual(heads, ['문제 정의', '역할', '기술', '결과']);
+    assert.deepEqual(heads, ['문제 정의', '역할', '기술', '결과', '분석 사례']);
   }
 });
-
 test('interests describe the decision-support analyst goal', () => {
   const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)[1];
   assert.ok(aside.includes('경영진의 의사결정을 돕는 데이터 분석가'), 'sidebar missing career goal sentence');
@@ -213,28 +211,21 @@ test('no rounded boxes anywhere except the round avatar', () => {
   }
 });
 
-test('project titles use the same plain 16px text as Education rows', () => {
-  const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n')
-    + [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]).join('\n');
-  const rules = [...css.matchAll(/\.ptitle\s*\{([^}]*)\}/g)].map((m) => m[1]);
-  assert.ok(rules.length > 0, 'no .ptitle rule');
-  for (const r of rules) {
-    const size = r.match(/font-size:\s*(\d+)px/);
-    assert.ok(!size || Number(size[1]) <= 16, `.ptitle font-size too large: ${size && size[1]}px`);
-    assert.ok(!/font-weight:\s*(600|700|bold)/.test(r), '.ptitle should not be bold');
-  }
+test('expanded project titles are the largest text inside each project', () => {
+  const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n');
+  const size = (sel) => Number((css.match(new RegExp(sel + '\\{[^}]*font-size:(\\d+)px')) || [])[1]);
+  assert.ok(size('\\.ptitle') > size('h4'), `title ${size('\\.ptitle')}px should exceed subheading ${size('h4')}px`);
 });
-
 test('project toggle titles are the short names', () => {
-  const titles = [...html.matchAll(/<summary[^>]*>([\s\S]*?)<\/summary>/g)].map((m) => m[1].replace(/<[^>]+>/g, '').trim());
+  const titles = [...html.matchAll(/<span class="ptitle"[^>]*>([^<]+)<\/span>/g)].map((m) => m[1].trim());
   assert.deepEqual(titles, ['중고차 가격 예측 (IBA 회귀 대회)', '대출 부실 예측 · 승인 정책 설계 (German Credit)', 'OIBC 경진대회']);
 });
 
 test('every result number has a short one-line label', () => {
-  const bodies = [...html.matchAll(/<\/summary>([\s\S]*?)<\/details>/g)].map((m) => m[1]);
+  const bodies = [...html.matchAll(/<article class="project"[^>]*>([\s\S]*?)<\/article>/g)].map((m) => m[1]);
   assert.equal(bodies.length, 3);
   for (const body of bodies) {
-    const result = body.split(/<h4[^>]*>결과<\/h4>/)[1];
+    const result = body.split(/<h4[^>]*>결과<\/h4>/)[1].split(/<h4[^>]*>분석 사례<\/h4>/)[0];
     assert.ok(result, 'no 결과 section');
     assert.ok(!/<p[\s>]/.test(result), '결과 should have no prose paragraphs');
     assert.ok(!/<img/.test(result), '결과 should have no images');
@@ -254,7 +245,7 @@ test('every result number has a short one-line label', () => {
   }
 });
 test('IBA result tiles show the verified leaderboard numbers', () => {
-  const body = html.split('<span class="ptitle">중고차 가격 예측 (IBA 회귀 대회)')[1].split('</details>')[0];
+  const body = html.split('<span class="ptitle">중고차 가격 예측 (IBA 회귀 대회)')[1].split('</article>')[0];
   for (const t of ['2,010.31', '2,122.44', '−5.3%', '0.9563']) assert.ok(body.includes(t), `IBA missing ${t}`);
   assert.ok(!/<b>31회<\/b>/.test(body), '31회 tile should be removed');
 });
@@ -274,17 +265,15 @@ test('OIBC lives in its own Contest section below Projects', () => {
   const projSection = html.slice(proj, contest);
   const contestSection = html.slice(contest);
   assert.ok(!projSection.includes('OIBC 경진대회'), 'OIBC should not be under Projects');
-  assert.ok(/<details class="project"[\s\S]*?OIBC 경진대회/.test(contestSection), 'OIBC toggle missing under Contest');
+  assert.ok(/<article class="project"[\s\S]*?OIBC 경진대회/.test(contestSection), 'OIBC article missing under Contest');
 });
 
-test('each toggle group closes with its own bottom line', () => {
-  const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n')
-    + [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]).join('\n');
-  assert.ok(/\.toggle-list>?\s*>?\s*\.project:last-child\s*\{[^}]*border-bottom/.test(css), 'no per-group bottom line rule');
-  const groups = [...html.matchAll(/<div class="toggle-list">([\s\S]*?)<\/div>\s*(?=<h2|<footer)/g)];
-  assert.equal(groups.length, 2, 'Projects and Contest should each have a toggle-list');
+test('each project group closes with its own bottom line', () => {
+  const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n');
+  assert.ok(/\.project-list>?\s*>?\s*\.project:last-child\s*\{[^}]*border-bottom/.test(css), 'no per-group bottom line rule');
+  const groups = [...html.matchAll(/<div class="project-list">/g)];
+  assert.equal(groups.length, 2, 'Projects and Contest should each have a project-list');
 });
-
 test('classification project shows the deck numbers under Projects', () => {
   const proj = html.slice(html.search(/<h2[^>]*>Projects<\/h2>/), html.search(/<h2[^>]*>Contest<\/h2>/));
   const body = proj.split('<span class="ptitle">대출 부실 예측 · 승인 정책 설계 (German Credit)')[1];
@@ -297,7 +286,7 @@ test('classification project shows the deck numbers under Projects', () => {
 });
 
 test('OIBC result leads with the final rank', () => {
-  const body = html.split('<span class="ptitle">OIBC 경진대회')[1].split('</details>')[0];
+  const body = html.split('<span class="ptitle">OIBC 경진대회')[1].split('</article>')[0];
   const result = body.split(/<h4[^>]*>결과<\/h4>/)[1];
   const first = result.match(/<div class="stat best"[^>]*><b>([^<]+)<\/b><span class="stat-label">([^<]+)<\/span>/);
   assert.ok(first, 'no highlighted first tile');
@@ -305,18 +294,16 @@ test('OIBC result leads with the final rank', () => {
   assert.equal(first[2], '385팀 중 상위 20%');
 });
 
-test('profile shows the new tagline and a small photo avatar', () => {
-  const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)[1];
-  assert.ok(aside.includes('데이터로 더 나은 결정을 돕는 분석가'), 'new tagline missing');
+test('hero shows a small photo avatar without EXIF', () => {
+  const head = html.match(/<header class="hero"[^>]*>([\s\S]*?)<\/header>/)[1];
   assert.ok(!html.includes('지망생'), 'old tagline still present');
-  const img = aside.match(/<img[^>]+src="\/profile\.jpg"[^>]*>/);
+  const img = head.match(/<img[^>]+src="\/profile\.jpg"[^>]*>/);
   assert.ok(img, 'avatar photo missing');
   assert.ok(/alt="[^"]+"/.test(img[0]), 'avatar needs alt text');
   const buf = readFileSync(join(dist, 'profile.jpg'));
   assert.ok(buf.length < 80_000, `photo too heavy: ${buf.length} bytes`);
   assert.ok(!buf.includes(Buffer.from('Exif')), 'photo still carries EXIF metadata');
 });
-
 test('link preview (Open Graph) tags point at real files', () => {
   const meta = (p) => (html.match(new RegExp(`<meta[^>]+(?:property|name)="${p}"[^>]+content="([^"]+)"`)) || [])[1];
   assert.equal(meta('og:url'), 'https://skcsug.github.io/');
@@ -382,7 +369,7 @@ test('profile photo is larger and high enough resolution', () => {
 });
 
 test('sidebar links read just GitHub and Resume, avatar matches resume size', () => {
-  const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)[1];
+  const aside = html.match(/<header class="hero"[^>]*>([\s\S]*?)<\/header>/)[1];
   const btns = [...aside.matchAll(/<a class="btn"[^>]*>([^<]+)<\/a>/g)].map((m) => m[1].trim());
   assert.deepEqual(btns, ['GitHub', 'Resume', 'guscks728@naver.com']);
   assert.ok(/<a class="btn" href="mailto:guscks728@naver\.com"/.test(aside), 'Email should be a mailto link');
@@ -392,7 +379,7 @@ test('sidebar links read just GitHub and Resume, avatar matches resume size', ()
 });
 
 test('OIBC retrospective is downloadable from the Contest toggle', () => {
-  const body = html.split('<span class="ptitle">OIBC 경진대회')[1].split('</details>')[0];
+  const body = html.split('<span class="ptitle">OIBC 경진대회')[1].split('</article>')[0];
   assert.ok(/href="\/oibc-retrospective\.pdf"/.test(body), 'OIBC toggle should link the retrospective PDF');
   const pdf = readFileSync(join(dist, 'oibc-retrospective.pdf')).toString('latin1');
   assert.ok(pdf.startsWith('%PDF'), 'retrospective PDF missing or invalid');
@@ -432,4 +419,34 @@ test('Skills has a muted Others line after the main tools', () => {
   assert.ok(others, 'Others line missing');
   assert.equal(others[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(), 'Others C/C++ · HTML/CSS/JavaScript');
   assert.ok(aside.indexOf('skills-others') > aside.indexOf('LightGBM / XGBoost'), 'Others should follow the main skills');
+});
+
+test('Highlights table sits right after the hero and links each project', () => {
+  const at = html.search(/<h2[^>]*>Highlights<\/h2>/);
+  assert.ok(at > -1 && at < html.search(/<h2[^>]*>Education<\/h2>/), 'Highlights should come before Education');
+  const table = html.slice(at).match(/<table class="highlights"[^>]*>([\s\S]*?)<\/table>/)[1];
+  const rows = [...table.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/g)].map((m) => m[1]).filter((r) => r.includes('<td'));
+  assert.equal(rows.length, 3);
+  assert.ok(rows[0].includes('OIBC 경진대회') && rows[0].includes('385팀 중 78위'), 'strongest result (OIBC) should lead');
+  for (const t of ['F1 0.6667', 'RMSE −5.3%']) assert.ok(table.includes(t), `Highlights missing ${t}`);
+  assert.ok(/href="\/credit-demo\/"/.test(table), 'Highlights should link the demo');
+  const ids = [...html.matchAll(/<article class="project"[^>]*id="([^"]+)"/g)].map((m) => m[1]);
+  for (const id of ids) assert.ok(table.includes(`href="#${id}"`), `Highlights should link #${id}`);
+});
+
+test('each project has an analysis case with 문제 → 원인 → 판단 → 조치 → 결과 and a comparison table', () => {
+  const cases = {
+    'OIBC 경진대회': ['−25.8%', '80%', '86~89%'],
+    '대출 부실 예측 · 승인 정책 설계 (German Credit)': ['190/200', '0.6522', '0.6667'],
+    '중고차 가격 예측 (IBA 회귀 대회)': ['2,036.15', '2,036.36', '2,013.53'],
+  };
+  for (const [title, nums] of Object.entries(cases)) {
+    const body = html.split(`<span class="ptitle">${title}`)[1].split('</article>')[0];
+    const c = body.split(/<h4[^>]*>분석 사례<\/h4>/)[1];
+    assert.ok(c, `${title}: no 분석 사례`);
+    const labels = [...c.matchAll(/<dt[^>]*>([^<]+)<\/dt>/g)].map((m) => m[1].trim());
+    assert.deepEqual(labels, ['문제', '원인', '판단', '조치', '결과'], `${title}: case steps`);
+    assert.ok(/<table class="case-table"/.test(c), `${title}: comparison table missing`);
+    for (const n of nums) assert.ok(c.includes(n), `${title}: case missing ${n}`);
+  }
 });

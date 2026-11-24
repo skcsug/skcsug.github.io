@@ -27,15 +27,14 @@ img, svg { max-width: 100%; height: auto; display: block; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* 레이아웃: 왼쪽 프로필, 오른쪽 프로젝트 */
-.layout {
-  max-width: 1080px; margin: 0 auto; padding: 56px 24px 40px;
-  display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 48px; align-items: start;
+/* 첫 화면: 사진 + 큰 문장 + 링크 (전체 폭) */
+.hero {
+  max-width: 1080px; margin: 0 auto; padding: 56px 24px 8px;
+  display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 32px; align-items: center;
 }
-.content { min-width: 0; }
-
-/* 프로필 사이드바 */
-.profile { position: sticky; top: 40px; }
+.nickname { margin: 0 0 6px; color: var(--muted); font-size: 15px; font-weight: 600; letter-spacing: 0.02em; }
+.hero h1 { margin: 0 0 14px; font-size: 32px; line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; }
+.buttons { display: flex; gap: 4px 20px; flex-wrap: wrap; }
 .avatar {
   width: 120px; height: 120px; border-radius: 50%;
   background: var(--soft); border: 1px solid var(--line);
@@ -44,11 +43,16 @@ a:hover { text-decoration: underline; }
   overflow: hidden;
 }
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
-.profile h1 { margin: 14px 0 0; font-size: 28px; line-height: 1.2; letter-spacing: -0.01em; }
-.tagline { margin: 4px 0 14px; color: var(--muted); }
-.buttons { display: flex; gap: 4px 16px; flex-wrap: wrap; }
-.profile .buttons { flex-direction: column; align-items: flex-start; }
-.profile h2 { margin-top: 28px; }
+
+/* 아래: 왼쪽 관심 분야·Skills, 오른쪽 본문 */
+.layout {
+  max-width: 1080px; margin: 0 auto; padding: 40px 24px 40px;
+  display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 48px; align-items: start;
+}
+.content { min-width: 0; }
+.profile { position: sticky; top: 32px; }
+.profile h2 + * { margin-top: 0; }
+.profile h2:not(:first-child) { margin-top: 28px; }
 .goal { margin: 0 0 8px; font-size: 15px; font-weight: 600; line-height: 1.6; }
 .interests { font-size: 14px; line-height: 1.6; }
 .interests li { margin: 6px 0; }
@@ -61,7 +65,7 @@ a:hover { text-decoration: underline; }
 .btn.disabled:hover { text-decoration: none; }
 
 h2 { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; font-weight: 600; }
-h4 { font-size: 17px; margin: 28px 0 6px; }
+h4 { font-size: 15px; margin: 22px 0 6px; }
 .meta { color: var(--muted); font-size: 14px; }
 
 /* Education / Activities 공통 */
@@ -77,25 +81,30 @@ h4 { font-size: 17px; margin: 28px 0 6px; }
 /* Projects 다음 섹션 제목 위 간격 */
 .section-gap { margin-top: 36px; }
 
-/* 프로젝트 토글 */
-.project { border-top: 1px solid var(--line); margin: 0; }
-.toggle-list > .project:last-child { border-bottom: 1px solid var(--line); }
-.project summary {
-  list-style: none; cursor: pointer; position: relative;
-  padding: 12px 40px 12px 0;
-  display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px;
-}
-.project summary::-webkit-details-marker { display: none; }
-.project summary::after {
-  content: '+'; position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
-  font-size: 18px; line-height: 1; color: var(--muted);
-}
-.project[open] > summary::after { content: '−'; }
-.project summary:hover .ptitle { color: var(--accent); }
-.project summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.ptitle { font-size: 16px; font-weight: 400; color: var(--text); }
-.body { padding: 0 0 24px; }
-.body > h4:first-child { margin-top: 16px; }
+/* 프로젝트: 항상 펼친 블록, 블록 사이 가는 선 */
+.project { border-top: 1px solid var(--line); padding: 24px 0 32px; margin: 0; }
+.project-list > .project:last-child { border-bottom: 1px solid var(--line); }
+.phead { margin: 0; }
+.ptitle { font-size: 21px; font-weight: 700; color: var(--text); line-height: 1.4; }
+.project > h4:first-of-type { margin-top: 14px; }
+
+/* 한눈에 보기 표 */
+.highlights { width: 100%; border-collapse: collapse; font-size: 15px; }
+.highlights th { text-align: left; font-size: 12px; font-weight: 600; color: var(--muted); padding: 0 12px 8px 0; border-bottom: 1px solid var(--text); }
+.highlights td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.highlights td a:first-child { color: var(--text); }
+.highlights td a:hover { color: var(--accent); }
+.highlights .muted { color: var(--muted); white-space: nowrap; }
+.highlights b { color: var(--accent); }
+
+/* 분석 사례 */
+.case-title { margin: 0 0 10px; font-weight: 600; }
+.case-steps { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 6px 12px; margin: 0 0 14px; font-size: 15px; }
+.case-steps dt { color: var(--muted); font-weight: 600; }
+.case-steps dd { margin: 0; }
+.case-table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.case-table th { text-align: left; font-weight: 600; color: var(--muted); padding: 6px 10px 6px 0; border-bottom: 1px solid var(--text); }
+.case-table td { padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line); }
 ul { padding-left: 20px; margin: 6px 0; }
 li { margin: 2px 0; }
 
@@ -127,18 +136,24 @@ figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
 footer { margin-top: 32px; color: var(--muted); font-size: 14px; }
 
 @media (max-width: 860px) {
-  .layout { grid-template-columns: 1fr; gap: 28px; padding-top: 32px; }
+  .layout { grid-template-columns: 1fr; gap: 28px; padding-top: 28px; }
   .profile { position: static; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
-  .profile .buttons { flex-direction: row; }
 }
 
 @media (max-width: 520px) {
-  .layout { padding: 28px 16px 32px; }
-  .avatar { width: 96px; height: 96px; font-size: 26px; }
-  .profile h1 { font-size: 26px; }
-  .project summary { padding: 12px 32px 12px 0; }
-  .project summary::after { right: 4px; }
-  .body { padding: 0 0 20px; }
+  .hero { grid-template-columns: 84px minmax(0, 1fr); gap: 18px; padding: 28px 16px 0; }
+  .avatar { width: 84px; height: 84px; font-size: 26px; }
+  .hero h1 { font-size: 22px; margin-bottom: 10px; }
+  .buttons { gap: 2px 14px; }
+  .layout { padding: 24px 16px 32px; }
+  .ptitle { font-size: 18px; }
+  .highlights thead { display: none; }
+  .highlights tr { display: block; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .highlights td { display: inline; padding: 0; border: 0; }
+  .highlights td:first-child { display: block; font-weight: 600; margin-bottom: 2px; }
+  .highlights td.muted { font-size: 13px; margin-right: 8px; }
+  .highlights td:last-child { display: block; margin-top: 2px; }
+  .case-steps { grid-template-columns: 36px minmax(0, 1fr); font-size: 14px; }
   .stats { grid-template-columns: 1fr 1fr; gap: 16px; }
   .stat b { font-size: 22px; }
   /* 휴대폰에서는 그래프가 약 0.54배로 줄어들므로 SVG 안 글자를 키웁니다 */
