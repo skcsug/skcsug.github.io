@@ -425,3 +425,11 @@ test('resume project names match the site toggle titles', () => {
   const resume = [...r.matchAll(/<h2[^>]*>([^<]+)<span/g)].map((m) => m[1].trim());
   assert.deepEqual([...resume].sort(), [...site].sort());
 });
+
+test('Skills has a muted Others line after the main tools', () => {
+  const aside = html.match(/<aside[^>]*>([\s\S]*?)<\/aside>/)[1];
+  const others = aside.match(/<p class="skills-others"[^>]*>([\s\S]*?)<\/p>/);
+  assert.ok(others, 'Others line missing');
+  assert.equal(others[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(), 'Others C/C++ · HTML/CSS/JavaScript');
+  assert.ok(aside.indexOf('skills-others') > aside.indexOf('LightGBM / XGBoost'), 'Others should follow the main skills');
+});

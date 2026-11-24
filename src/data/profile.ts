@@ -13,6 +13,7 @@ export const profile = {
     '전달과 제안 — 분석 결과를 시각화·요약하여 다음 의사결정에 관해 조언하는 일',
   ],
   skills: ['Python (pandas · scikit-learn)', 'LightGBM / XGBoost', 'Git'],
+  otherSkills: ['C/C++', 'HTML/CSS/JavaScript'],
   // 이력서 PDF를 public/resume.pdf에 넣은 뒤 '/resume.pdf'로 바꾸면 버튼이 켜집니다.
   resumeUrl: '/resume.pdf' as string | null,
 };
