@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import ProjectArticle from '../components/ProjectArticle.astro';
 import { profile, featured, featuredStats, otherProjects, contests } from '../data/profile';
-// 학력·활동·어학은 이력서와 같은 데이터를 씁니다
+// 학력·활동·자격증은 이력서와 같은 데이터를 씁니다
 import { tables } from '../data/resume';
 
 const projects = [{ ...featured, stats: featuredStats }, ...otherProjects];
@@ -105,7 +105,7 @@ const githubLabel = profile.github.replace('https://', '');
               <table class="edu-table">{tables.activities.map((r) => <tr><td>{r.left}</td><td>{r.right}</td></tr>)}</table>
             </div>
             <div class="edu-right">
-              <h3 class="edu-h">어학</h3>
+              <h3 class="edu-h">자격증</h3>
               <table class="edu-table">{tables.language.map((r) => <tr><td>{r.left}</td><td>{r.right}</td></tr>)}</table>
             </div>
           </div>

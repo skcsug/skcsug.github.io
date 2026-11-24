@@ -85,14 +85,14 @@ const rich = (t: string) =>
       ))}
 
       <section class="tables">
-        <h2>학력, 활동, 어학</h2>
+        <h2>학력, 활동, 자격증</h2>
         <h4>학력</h4>
         <table>{tables.education.map((r) => <tr><td>{r.left}</td><td>{r.right}</td></tr>)}</table>
         <h4>활동</h4>
         <table>{tables.activities.map((r) => <tr><td>{r.left}</td><td>{r.right}</td></tr>)}</table>
         <div class="two">
           <div>
-            <h4>어학</h4>
+            <h4>자격증</h4>
             <table>{tables.language.map((r) => <tr><td>{r.left}</td><td>{r.right}</td></tr>)}</table>
           </div>
           <div>

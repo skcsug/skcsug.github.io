@@ -157,7 +157,7 @@ test('sidebar lists Skills under interests', () => {
   assert.deepEqual(tags, ['Python (pandas · scikit-learn)', 'LightGBM / XGBoost', 'Git']);
 });
 
-test('Education sits right above Contact, resume-style in Korean: 학력·활동 left, 어학 right', () => {
+test('Education sits right above Contact, resume-style in Korean: 학력·활동 left, 자격증 right', () => {
   const edu = html.search(/<h2[^>]*>Education<\/h2>/);
   assert.ok(edu > html.search(/<h2[^>]*>Contest<\/h2>/), 'Education should come after Contest');
   assert.ok(edu < html.search(/<h2[^>]*>Contact<\/h2>/), 'Education should come right before Contact');
@@ -168,7 +168,7 @@ test('Education sits right above Contact, resume-style in Korean: 학력·활동
   assert.ok(left && right, 'two columns expected');
   const heads = (h) => [...h.matchAll(/<h3[^>]*>([^<]+)<\/h3>/g)].map((m) => m[1].trim());
   assert.deepEqual(heads(left[1]), ['학력', '활동']);
-  assert.deepEqual(heads(right[1]), ['어학']);
+  assert.deepEqual(heads(right[1]), ['자격증']);
   for (const t of ['부산대학교 정보컴퓨터공학부 컴퓨터공학전공 편입', '2026.03 ~ 2028.08 예정', '전남대학교 소프트웨어공학과(GPA 4.06/4.5)', '2021.03 ~ 2026.02', '지능형 경영 분석 학회 12기']) {
     assert.ok(left[1].includes(t), `left column missing ${t}`);
   }
@@ -313,7 +313,7 @@ test('resume page has the reference sections and verified numbers', () => {
   const r = readFileSync(join(dist, 'resume', 'index.html'), 'utf8');
   for (const t of ['정현찬', '데이터 분석가', 'guscks728@naver.com', 'skcsug.github.io',
     '부산대학교 정보컴퓨터공학부 컴퓨터공학전공', '2028.08', '전남대학교 소프트웨어공학과', '4.06/4.5', '980/990',
-    'OIBC', '385팀 중 78위', '+2,394만 원', '0.6667', '2,010.31', '| 문제', '| 결과', '| 주요 작업', '학력, 활동, 어학']) {
+    'OIBC', '385팀 중 78위', '+2,394만 원', '0.6667', '2,010.31', '| 문제', '| 결과', '| 주요 작업', '학력, 활동, 자격증']) {
     assert.ok(r.includes(t.replace('&', '&amp;')), `resume missing ${t}`);
   }
   assert.ok(!/010-\d{3,4}-\d{4}/.test(r), 'phone number must not be published');
