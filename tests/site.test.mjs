@@ -157,43 +157,24 @@ test('sidebar lists Skills under interests', () => {
   assert.deepEqual(tags, ['Python (pandas · scikit-learn)', 'LightGBM / XGBoost', 'Git']);
 });
 
-test('Education sits right above Contact and includes the previous school and TOEIC', () => {
+test('Education sits right above Contact, resume-style in Korean: 학력·활동 left, 어학 right', () => {
   const edu = html.search(/<h2[^>]*>Education<\/h2>/);
   assert.ok(edu > html.search(/<h2[^>]*>Contest<\/h2>/), 'Education should come after Contest');
   assert.ok(edu < html.search(/<h2[^>]*>Contact<\/h2>/), 'Education should come right before Contact');
+  assert.ok(!/<h2[^>]*>Activities<\/h2>/.test(html), 'IBA now lives inside Education');
   const sec = html.slice(edu, html.search(/<h2[^>]*>Contact<\/h2>/));
-  for (const t of ['Chonnam National University', 'Software Engineering', 'GPA 4.06/4.5', '2021.03 ~ 2026.02', 'TOEIC 980/990']) {
-    assert.ok(sec.includes(t), `Education missing ${t}`);
+  const left = sec.match(/<div class="edu-left"[^>]*>([\s\S]*?)<\/div>\s*<div class="edu-right"/);
+  const right = sec.match(/<div class="edu-right"[^>]*>([\s\S]*?)<\/div>/);
+  assert.ok(left && right, 'two columns expected');
+  const heads = (h) => [...h.matchAll(/<h3[^>]*>([^<]+)<\/h3>/g)].map((m) => m[1].trim());
+  assert.deepEqual(heads(left[1]), ['학력', '활동']);
+  assert.deepEqual(heads(right[1]), ['어학']);
+  for (const t of ['부산대학교 정보컴퓨터공학부 컴퓨터공학전공 편입', '2026.03 ~ 2028.08 예정', '전남대학교 소프트웨어공학과(GPA 4.06/4.5)', '2021.03 ~ 2026.02', '지능형 경영 분석 학회 12기']) {
+    assert.ok(left[1].includes(t), `left column missing ${t}`);
   }
-  for (const s of ['Pusan National University', '2026 ~', 'Computer Science &amp; Engineering']) {
-    assert.ok(html.includes(s), `missing ${s}`);
-  }
-});
-
-test('Activities sits between Highlights and Projects', () => {
-  const at = html.search(/<h2[^>]*>Activities<\/h2>/);
-  assert.ok(at > html.search(/<h2[^>]*>Highlights<\/h2>/), 'Activities missing or above Highlights');
-  assert.ok(at < html.search(/<h2[^>]*>Projects<\/h2>/), 'Activities should come before Projects');
-  for (const s of ['Intelligent Business Analytics (IBA)', '지능형 경영 분석 학회', '2026.08 ~', '12th Cohort Member']) {
-    assert.ok(html.includes(s), `missing ${s}`);
-  }
-  assert.ok(!html.includes('KEEPER'), 'KEEPER should not be listed');
-});
-
-test('Education uses the bulleted degree · school (date) row style', () => {
-  const sec = html.match(/<h2[^>]*>Education<\/h2>([\s\S]*?)<\/section>/)[1];
-  assert.ok(/<ul class="edu"/.test(sec), 'Education should be a <ul class="edu"> list');
-  assert.ok(/<li[^>]*>[\s\S]*B\.S\., Computer Science &amp; Engineering[\s\S]*Pusan National University \(<em[^>]*>2026 ~<\/em>\)/.test(sec),
-    'row should read "B.S., Computer Science & Engineering  Pusan National University (2026 ~)" with italic date');
-});
-
-test('Activities uses the Education row style with only name, group and date', () => {
-  const sec = html.match(/<h2[^>]*>Activities<\/h2>([\s\S]*?)<\/section>/)[1];
-  assert.ok(/<ul class="edu"/.test(sec), 'Activities should reuse the <ul class="edu"> row style');
-  assert.ok(/Intelligent Business Analytics \(IBA\)[\s\S]*지능형 경영 분석 학회 · 12th Cohort Member \(<em[^>]*>2026\.08 ~<\/em>\)/.test(sec),
-    'row should read "Intelligent Business Analytics (IBA)  지능형 경영 분석 학회 · 12th Cohort Member (2026.08 ~)"');
-  assert.ok(!sec.includes('Pusan National University'), 'university should be dropped from Activities');
-  assert.ok(!sec.includes('팀 리드') && !sec.includes('교육 세션'), 'detail bullets should be removed');
+  for (const t of ['TOEIC', '980/990']) assert.ok(right[1].includes(t), `right column missing ${t}`);
+  const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n');
+  assert.ok(/\.edu-grid\{[^}]*grid-template-columns/.test(css), 'Education should be a two-column grid');
 });
 
 test('no pill-shaped chips anywhere', () => {

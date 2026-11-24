@@ -81,12 +81,13 @@ h4 { font-size: 15px; margin: 22px 0 6px; }
 /* Education / Activities 공통 */
 .block { margin-bottom: 36px; }
 
-/* Education: 글머리 기호 + "학위, 전공   학교 (기간)" 한 줄, 줄마다 밑줄 */
-.edu { padding-left: 22px; margin: 0; }
-.edu li { color: var(--muted); padding: 12px 0 12px 6px; border-bottom: 1px solid var(--line); margin: 0; }
-.edu li::marker { color: var(--muted); }
-.edu-degree { color: var(--text); margin-right: 28px; }
-.edu-school { display: inline-block; }
+/* Education: 이력서와 같은 형식 — 왼쪽 학력·활동, 오른쪽 어학 */
+.edu-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.edu-h { font-size: 14px; font-weight: 700; margin: 0 0 6px; }
+.edu-h:not(:first-child) { margin-top: 22px; }
+.edu-table { width: 100%; border-collapse: collapse; border-top: 1px solid var(--text); font-size: 14px; }
+.edu-table td { padding: 9px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.edu-table td:last-child { text-align: right; color: var(--muted); white-space: nowrap; padding-left: 12px; }
 
 /* Projects 다음 섹션 제목 위 간격 */
 .section-gap { margin-top: 36px; }
@@ -169,6 +170,9 @@ footer { margin-top: 32px; color: var(--muted); font-size: 14px; }
   .highlights td:first-child { display: block; font-weight: 600; margin-bottom: 2px; }
   .highlights td.muted { font-size: 13px; margin-right: 8px; }
   .case-steps { grid-template-columns: 36px minmax(0, 1fr); font-size: 14px; }
+  .edu-grid { grid-template-columns: 1fr; gap: 8px; }
+  .edu-right .edu-h { margin-top: 22px; }
+  .edu-table { font-size: 14px; }
   .stats { grid-template-columns: 1fr 1fr; gap: 16px; }
   .stat b { font-size: 22px; }
   /* 휴대폰에서는 그래프가 약 0.54배로 줄어들므로 SVG 안 글자를 키웁니다 */

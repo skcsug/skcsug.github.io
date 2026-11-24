@@ -1,7 +1,9 @@
 ---
 import '../styles/global.css';
 import ProjectArticle from '../components/ProjectArticle.astro';
-import { profile, education, activities, featured, featuredStats, otherProjects, contests } from '../data/profile';
+import { profile, featured, featuredStats, otherProjects, contests } from '../data/profile';
+// 학력·활동·어학은 이력서와 같은 데이터를 씁니다
+import { tables } from '../data/resume';
 
 const projects = [{ ...featured, stats: featuredStats }, ...otherProjects];
 // 한눈에 보기: 가장 강한 결과(대회)부터
@@ -87,18 +89,6 @@ const githubLabel = profile.github.replace('https://', '');
           </table>
         </section>
 
-        <section class="block" id="activities">
-          <h2>Activities</h2>
-          <ul class="edu">
-            {activities.map((a) => (
-              <li>
-                <span class="edu-degree">{a.name}</span>
-                <span class="edu-school">{a.sub} (<em>{a.period}</em>)</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
         <h2 id="projects">Projects</h2>
         <div class="project-list">{projects.map((p) => <ProjectArticle item={p} />)}</div>
 
@@ -107,14 +97,18 @@ const githubLabel = profile.github.replace('https://', '');
 
         <section class="block" id="education">
           <h2 class="section-gap">Education</h2>
-          <ul class="edu">
-            {education.map((e) => (
-              <li>
-                <span class="edu-degree">{e.degree ? `${e.degree}, ${e.major}` : e.major}</span>
-                {e.school && <span class="edu-school">{e.school} (<em>{e.period}</em>)</span>}
-              </li>
-            ))}
-          </ul>
+          <div class="edu-grid">
+            <div class="edu-left">
+              <h3 class="edu-h">학력</h3>
+              <table class="edu-table">{tables.education.map((r) => <tr><td>{r.left}</td><td>{r.right}</td></tr>)}</table>
+              <h3 class="edu-h">활동</h3>
+              <table class="edu-table">{tables.activities.map((r) => <tr><td>{r.left}</td><td>{r.right}</td></tr>)}</table>
+            </div>
+            <div class="edu-right">
+              <h3 class="edu-h">어학</h3>
+              <table class="edu-table">{tables.language.map((r) => <tr><td>{r.left}</td><td>{r.right}</td></tr>)}</table>
+            </div>
+          </div>
         </section>
 
         <section class="block contact" id="contact">

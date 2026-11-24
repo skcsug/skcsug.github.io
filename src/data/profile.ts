@@ -21,16 +21,6 @@ export const profile = {
   resumeUrl: '/resume.pdf' as string | null,
 };
 
-export const education = [
-  { degree: 'B.S.', major: 'Computer Science & Engineering', school: 'Pusan National University', period: '2026 ~' },
-  { major: 'Software Engineering (GPA 4.06/4.5)', school: 'Chonnam National University', period: '2021.03 ~ 2026.02' },
-  { major: 'TOEIC 980/990' },
-];
-
-export const activities = [
-  { name: 'Intelligent Business Analytics (IBA)', sub: '지능형 경영 분석 학회 · 12th Cohort Member', period: '2026.08 ~' },
-];
-
 export const featured = {
   id: 'used-car',
   title: '중고차 가격 예측 (IBA 회귀 대회)',
