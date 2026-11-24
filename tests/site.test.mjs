@@ -371,8 +371,8 @@ test('profile photo is larger and high enough resolution', () => {
 test('sidebar links read just GitHub and Resume, avatar matches resume size', () => {
   const aside = html.match(/<header class="hero"[^>]*>([\s\S]*?)<\/header>/)[1];
   const btns = [...aside.matchAll(/<a class="btn"[^>]*>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-  assert.deepEqual(btns, ['GitHub', 'Resume', 'guscks728@naver.com']);
-  assert.ok(/<a class="btn" href="mailto:guscks728@naver\.com"/.test(aside), 'Email should be a mailto link');
+  assert.deepEqual(btns, ['GitHub', 'Resume', 'Contact']);
+  assert.ok(/<a class="btn" href="#contact"/.test(aside), 'Contact should jump to the contact section');
   const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n');
   const avatar = css.match(/\.avatar\{[^}]*width:(\d+)px/);
   assert.ok(avatar && Number(avatar[1]) >= 120, `avatar should be ~32mm (>=120px), got ${avatar && avatar[1]}`);
@@ -457,4 +457,24 @@ test('OIBC case is about modeling, not external data', () => {
   const body = html.split('<span class="ptitle">OIBC 경진대회')[1].split('</article>')[0];
   const c = body.split(/<h4[^>]*>분석 사례<\/h4>/)[1];
   for (const t of ['CAMS', 'AnEn', '−25.8%']) assert.ok(!c.includes(t), `OIBC case should not be about ${t}`);
+});
+
+test('sticky index menu links to real sections', () => {
+  const nav = html.match(/<nav class="site-nav"[^>]*>([\s\S]*?)<\/nav>/);
+  assert.ok(nav, 'index menu missing');
+  const links = [...nav[1].matchAll(/<a[^>]*href="#([^"]+)"[^>]*>([^<]+)<\/a>/g)].map((m) => [m[1], m[2].trim()]);
+  const labels = links.map(([, l]) => l).filter((l) => l !== 'skcsug');
+  assert.deepEqual(labels, ['Highlights', 'Education', 'Projects', 'Contest', 'Contact']);
+  for (const [id] of links) {
+    if (id === 'top') continue;
+    assert.ok(new RegExp(`id="${id}"`).test(html), `menu target #${id} missing`);
+  }
+  const css = walk(dist).filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')).join('\n');
+  assert.ok(/\.site-nav\{[^}]*position:sticky/.test(css), 'menu should stay visible while scrolling');
+});
+
+test('contact section shows the address and a mail link', () => {
+  const c = html.match(/<section[^>]*id="contact"[^>]*>([\s\S]*?)<\/section>/);
+  assert.ok(c, 'contact section missing');
+  assert.ok(/href="mailto:guscks728@naver\.com"[^>]*>guscks728@naver\.com</.test(c[1]), 'email should be visible and clickable');
 });

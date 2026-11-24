@@ -27,6 +27,16 @@ img, svg { max-width: 100%; height: auto; display: block; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+/* 상단 목차: 스크롤해도 위에 고정 */
+.site-nav { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
+.nav-inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.brand { color: var(--text); font-weight: 700; }
+.nav-links { display: flex; gap: 20px; font-size: 14px; overflow-x: auto; white-space: nowrap; }
+.nav-links a { color: var(--muted); }
+.nav-links a:hover { color: var(--accent); text-decoration: none; }
+[id] { scroll-margin-top: 68px; }
+html { scroll-behavior: smooth; }
+
 /* 첫 화면: 사진 + 큰 문장 + 링크 (전체 폭) */
 .hero {
   max-width: 1080px; margin: 0 auto; padding: 56px 24px 8px;
@@ -50,7 +60,7 @@ a:hover { text-decoration: underline; }
   display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 48px; align-items: start;
 }
 .content { min-width: 0; }
-.profile { position: sticky; top: 32px; }
+.profile { position: sticky; top: 84px; }
 .profile h2 + * { margin-top: 0; }
 .profile h2:not(:first-child) { margin-top: 28px; }
 .goal { margin: 0 0 8px; font-size: 15px; font-weight: 600; line-height: 1.6; }
@@ -133,6 +143,8 @@ figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
 .chart .label { fill: var(--text); font-size: 13px; font-weight: 600; }
 
 
+.contact p { margin: 0 0 4px; }
+.muted-line { color: var(--muted); font-size: 14px; }
 footer { margin-top: 32px; color: var(--muted); font-size: 14px; }
 
 @media (max-width: 860px) {
@@ -141,7 +153,11 @@ footer { margin-top: 32px; color: var(--muted); font-size: 14px; }
 }
 
 @media (max-width: 520px) {
-  .hero { grid-template-columns: 84px minmax(0, 1fr); gap: 18px; padding: 28px 16px 0; }
+  .nav-inner { padding: 0 16px; height: 48px; }
+  .brand { display: none; }
+  .nav-inner { justify-content: center; }
+  .nav-links { gap: 14px; font-size: 13px; }
+  .hero { grid-template-columns: 84px minmax(0, 1fr); gap: 18px; padding: 24px 16px 0; }
   .avatar { width: 84px; height: 84px; font-size: 26px; }
   .hero h1 { font-size: 22px; margin-bottom: 10px; }
   .buttons { gap: 2px 14px; }

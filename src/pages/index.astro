@@ -30,7 +30,20 @@ const githubLabel = profile.github.replace('https://', '');
     <meta property="og:locale" content="ko_KR" />
     <meta name="twitter:card" content="summary" />
   </head>
-  <body>
+  <body id="top">
+    <nav class="site-nav" aria-label="목차">
+      <div class="nav-inner">
+        <a class="brand" href="#top">{profile.nickname}</a>
+        <div class="nav-links">
+          <a href="#highlights">Highlights</a>
+          <a href="#education">Education</a>
+          <a href="#projects">Projects</a>
+          <a href="#contest">Contest</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </nav>
+
     <header class="hero">
       <div class="avatar"><img src="/profile.jpg" alt={`${profile.nickname} 프로필 사진`} width="120" height="120" /></div>
       <div class="hero-text">
@@ -41,7 +54,7 @@ const githubLabel = profile.github.replace('https://', '');
           {profile.resumeUrl
             ? <a class="btn" href={profile.resumeUrl} download>Resume</a>
             : <span class="btn disabled" aria-disabled="true">Resume (준비 중)</span>}
-          <a class="btn" href={`mailto:${profile.email}`}>{profile.email}</a>
+          <a class="btn" href="#contact">Contact</a>
         </div>
       </div>
     </header>
@@ -58,7 +71,7 @@ const githubLabel = profile.github.replace('https://', '');
       </aside>
 
       <main class="content">
-        <section class="block">
+        <section class="block" id="highlights">
           <h2>Highlights</h2>
           <table class="highlights">
             <thead><tr><th>프로젝트</th><th>기간</th><th>팀</th></tr></thead>
@@ -74,7 +87,7 @@ const githubLabel = profile.github.replace('https://', '');
           </table>
         </section>
 
-        <section class="block">
+        <section class="block" id="education">
           <h2>Education</h2>
           <ul class="edu">
             {education.map((e) => (
@@ -86,7 +99,7 @@ const githubLabel = profile.github.replace('https://', '');
           </ul>
         </section>
 
-        <section class="block">
+        <section class="block" id="activities">
           <h2>Activities</h2>
           <ul class="edu">
             {activities.map((a) => (
@@ -98,14 +111,20 @@ const githubLabel = profile.github.replace('https://', '');
           </ul>
         </section>
 
-        <h2>Projects</h2>
+        <h2 id="projects">Projects</h2>
         <div class="project-list">{projects.map((p) => <ProjectArticle item={p} />)}</div>
 
-        <h2 class="section-gap">Contest</h2>
+        <h2 class="section-gap" id="contest">Contest</h2>
         <div class="project-list">{contests.map((c) => <ProjectArticle item={c} />)}</div>
 
+        <section class="block contact" id="contact">
+          <h2 class="section-gap">Contact</h2>
+          <p><a href={`mailto:${profile.email}`}>{profile.email}</a></p>
+          <p class="muted-line">GitHub <a href={profile.github}>{githubLabel}</a> · <a href={profile.resumeUrl ?? '#'} download>이력서 PDF</a></p>
+        </section>
+
         <footer>
-          <a href={profile.github}>{githubLabel}</a> · Built with Astro · Hosted on GitHub Pages
+          Built with Astro · Hosted on GitHub Pages
         </footer>
       </main>
     </div>
