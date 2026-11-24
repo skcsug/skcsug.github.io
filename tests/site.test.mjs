@@ -204,7 +204,7 @@ test('expanded project titles are the largest text inside each project', () => {
 });
 test('project toggle titles are the short names', () => {
   const titles = [...html.matchAll(/<span class="ptitle"[^>]*>([^<]+)<\/span>/g)].map((m) => m[1].trim());
-  assert.deepEqual(titles, ['대출 부실 예측 모델과 승인 정책', '중고차 가격 예측 모델', '태양광 발전량 예측 모델 (OIBC 경진대회)']);
+  assert.deepEqual(titles, ['대출 연체 확률 예측 모델과 승인 기준', '중고차 가격 예측 모델', '태양광 발전량 예측 모델 (OIBC 경진대회)']);
 });
 
 test('every result number has a short one-line label', () => {
@@ -262,7 +262,7 @@ test('each project group closes with its own bottom line', () => {
 });
 test('classification project shows the deck numbers under Projects', () => {
   const proj = html.slice(html.search(/<h2[^>]*>Projects<\/h2>/), html.search(/<h2[^>]*>Contest<\/h2>/));
-  const body = proj.split('<span class="ptitle">대출 부실 예측 모델과 승인 정책')[1];
+  const body = proj.split('<span class="ptitle">대출 연체 확률 예측 모델과 승인 기준')[1];
   assert.ok(body, 'classification toggle missing under Projects');
   assert.ok(!/<b>5 : 1<\/b>/.test(body) && !/<b>81 · 17 · 102<\/b>/.test(body), 'removed classification tiles still shown');
   assert.ok(/<b>21종<\/b><span class="stat-label">비교한 모델 수<\/span>/.test(body), '21종 label should read 비교한 모델 수');
@@ -420,7 +420,7 @@ test('Highlights table sits right after the hero and links each project', () => 
   const table = html.slice(at).match(/<table class="highlights"[^>]*>([\s\S]*?)<\/table>/)[1];
   const rows = [...table.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/g)].map((m) => m[1]).filter((r) => r.includes('<td'));
   assert.equal(rows.length, 3);
-  assert.ok(rows[0].includes('대출 부실 예측 모델과 승인 정책') && rows[1].includes('중고차 가격 예측 모델') && rows[2].includes('OIBC'), 'Highlights should follow page order: 대출 → 중고차 → OIBC');
+  assert.ok(rows[0].includes('대출 연체 확률 예측 모델과 승인 기준') && rows[1].includes('중고차 가격 예측 모델') && rows[2].includes('OIBC'), 'Highlights should follow page order: 대출 → 중고차 → OIBC');
   const heads = [...table.matchAll(/<th[^>]*>([^<]*)<\/th>/g)].map((m) => m[1].trim());
   assert.deepEqual(heads, ['프로젝트', '기간', '팀'], 'no result column in Highlights');
   for (const t of ['385팀 중 78위', 'F1 0.6667', 'RMSE −5.3%']) assert.ok(!table.includes(t), `Highlights should not show ${t}`);
@@ -432,7 +432,7 @@ test('Highlights table sits right after the hero and links each project', () => 
 test('each project has an analysis case with 문제 → 원인 → 판단 → 조치 → 결과 and a comparison table', () => {
   const cases = {
     '태양광 발전량 예측 모델 (OIBC 경진대회)': ['2단계 보정', '−2.45%', '−3.98%', '5,066,852원'],
-    '대출 부실 예측 모델과 승인 정책': ['190/200', '0.6522', '0.6667'],
+    '대출 연체 확률 예측 모델과 승인 기준': ['190/200', '0.6522', '0.6667'],
     '중고차 가격 예측 모델': ['2,036.15', '2,036.36', '2,013.53'],
   };
   for (const [title, nums] of Object.entries(cases)) {
@@ -490,4 +490,13 @@ test('resume lists projects in the same order as the site', () => {
   const site = [...html.matchAll(/<span class="ptitle"[^>]*>([^<]+)<\/span>/g)].map((m) => m[1].trim());
   const resume = [...r.matchAll(/<h2[^>]*>([^<]+)<span/g)].map((m) => m[1].trim());
   assert.deepEqual(resume, site);
+});
+
+test('loan wording uses 연체 everywhere (no 부실) on site, demo and resume', () => {
+  for (const page of ['index.html', 'credit-demo/index.html', 'resume/index.html']) {
+    const t = readFileSync(join(dist, page), 'utf8').replace(/<[^>]+>/g, ' ');
+    assert.ok(!t.includes('부실'), `${page} still says 부실`);
+  }
+  const demo = readFileSync(join(dist, 'credit-demo', 'index.html'), 'utf8');
+  assert.ok(demo.includes('예상 연체 확률'), 'demo label should read 예상 연체 확률');
 });
