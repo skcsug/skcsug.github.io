@@ -23,7 +23,7 @@ export const profile = {
 
 export const featured = {
   id: 'used-car',
-  title: '중고차 가격 예측 (IBA 회귀 대회)',
+  title: '중고차 가격 예측 모델',
   period: '2026.11',
   team: '3명 · 팀장',
   highlight: 'RMSE −5.3%',
@@ -93,7 +93,7 @@ export const featuredStats = [
 export const contests = [
   {
     id: 'oibc',
-    title: 'OIBC 경진대회',
+    title: '태양광 발전량 예측 모델 (OIBC 경진대회)',
     period: '2026.10 ~ 11',
     team: '5명 · 팀장',
     highlight: '385팀 중 78위',
@@ -146,7 +146,7 @@ export const contests = [
 export const otherProjects: typeof contests = [
   {
     id: 'credit',
-    title: '대출 부실 예측 · 승인 정책 설계 (German Credit)',
+    title: '대출 부실 예측 모델과 승인 정책',
     period: '2026.09',
     team: '3~4명 · 팀장',
     highlight: 'F1 0.6667',

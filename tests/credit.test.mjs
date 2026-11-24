@@ -37,7 +37,7 @@ test('demo page is built and linked from the classification project', () => {
     assert.ok(demo.includes(t), `demo missing ${t}`);
   }
   const home = readFileSync(new URL('index.html', dist), 'utf8');
-  const cls = home.split('<span class="ptitle">대출 부실 예측 · 승인 정책 설계 (German Credit)')[1].split('</article>')[0];
+  const cls = home.split('<span class="ptitle">대출 부실 예측 모델과 승인 정책')[1].split('</article>')[0];
   assert.ok(/href="\/credit-demo\/"/.test(cls), 'classification project should link the demo');
   assert.ok(/href="https:\/\/github\.com\/skcsug\/german-credit-risk"/.test(cls), 'classification project should link the source');
 });

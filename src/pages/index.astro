@@ -5,9 +5,9 @@ import { profile, featured, featuredStats, otherProjects, contests } from '../da
 // 학력·활동·자격증은 이력서와 같은 데이터를 씁니다
 import { tables } from '../data/resume';
 
-const projects = [{ ...featured, stats: featuredStats }, ...otherProjects];
-// 한눈에 보기: 가장 강한 결과(대회)부터
-const highlights = [...contests, ...otherProjects, featured];
+// 페이지·한눈에 보기·이력서 모두 같은 순서: 대출 → 중고차 → OIBC
+const projects = [...otherProjects, { ...featured, stats: featuredStats }];
+const highlights = [...projects, ...contests];
 const githubLabel = profile.github.replace('https://', '');
 ---
 <!doctype html>

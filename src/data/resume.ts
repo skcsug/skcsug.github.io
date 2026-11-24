@@ -24,35 +24,6 @@ export const header = {
 
 export const projects = [
   {
-    name: contests[0].title,
-    period: '2026.10 ~ 2026.11.13',
-    summary: '태양광 발전량 예측 경진대회, 5명 팀의 팀장',
-    badge: '385팀 중 78위',
-    stack: 'Python, pandas, LightGBM, XGBoost, CatBoost, PyTorch(MLP), NOAA GFS·GEFS, ECMWF, Copernicus CAMS, 기상청 LDAPS, 클라우드 VM',
-    sections: [
-      { title: '문제', items: ['전국 253개 태양광 발전소의 다음 날 시간별 발전량을 예측해 두 집합자원으로 묶어 제출하고, 예측 오차만큼 정산금에서 페널티가 깎이는 대회입니다.'], list: false },
-      {
-        title: '결과',
-        items: [
-          '최종 순위 **385팀 중 78위**(상위 약 20%)',
-          '정산금 첫 제출 대비 **+2,394만 원**(6,444,957,097 → 6,468,895,230원), 내부 검증 페널티 3년 합 **−15.9%**',
-        ],
-        list: true,
-      },
-      {
-        title: '주요 작업',
-        items: [
-          '외부 예보 GFS·GEFS를 1단계 피처로 추가: 정산금 **+1,134만 원**, 검증 3년 합 **−6.44%**',
-          '2단계 보정(전국 합계 오차 재학습): 리더보드 페널티 **−2.8%**, 정산금 **+507만 원**',
-          '정보 한계 진단: 실제 관측 날씨를 넣어도 페널티 **−25.8%**뿐 → 모델 구조 대신 새 입력 정보로 방향 전환',
-          '판정 원칙: 채택 기준을 결과 전에 기록, 검증 2023·2024 **두 해 모두** 좋아질 때만 채택',
-          '재현성: 제출마다 커밋·명령·환경·파일 해시 기록, PC·VM 간 정산금 원 단위 일치 확인',
-        ],
-        list: true,
-      },
-    ],
-  },
-  {
     name: otherProjects[0].title,
     period: '2026.09',
     summary: 'IBA 분류 과제, 팀장 · 보완 발표 발표자',
@@ -83,7 +54,7 @@ export const projects = [
   {
     name: featured.title,
     period: '2026.11',
-    summary: '3명 팀의 팀장',
+    summary: 'IBA 회귀 대회, 3명 팀의 팀장',
     badge: 'RMSE −5.3%',
     stack: 'Python, pandas, scikit-learn, LightGBM, XGBoost, CatBoost, Git(PR 협업)',
     sections: [
@@ -105,6 +76,35 @@ export const projects = [
       },
     ],
   },
+  {
+    name: contests[0].title,
+    period: '2026.10 ~ 2026.11.13',
+    summary: '5명 팀의 팀장',
+    badge: '385팀 중 78위',
+    stack: 'Python, pandas, LightGBM, XGBoost, CatBoost, PyTorch(MLP), NOAA GFS·GEFS, ECMWF, Copernicus CAMS, 기상청 LDAPS, 클라우드 VM',
+    sections: [
+      { title: '문제', items: ['전국 253개 태양광 발전소의 다음 날 시간별 발전량을 예측해 두 집합자원으로 묶어 제출하고, 예측 오차만큼 정산금에서 페널티가 깎이는 대회입니다.'], list: false },
+      {
+        title: '결과',
+        items: [
+          '최종 순위 **385팀 중 78위**(상위 약 20%)',
+          '정산금 첫 제출 대비 **+2,394만 원**(6,444,957,097 → 6,468,895,230원), 내부 검증 페널티 3년 합 **−15.9%**',
+        ],
+        list: true,
+      },
+      {
+        title: '주요 작업',
+        items: [
+          '외부 예보 GFS·GEFS를 1단계 피처로 추가: 정산금 **+1,134만 원**, 검증 3년 합 **−6.44%**',
+          '2단계 보정(전국 합계 오차 재학습): 리더보드 페널티 **−2.8%**, 정산금 **+507만 원**',
+          '정보 한계 진단: 실제 관측 날씨를 넣어도 페널티 **−25.8%**뿐 → 모델 구조 대신 새 입력 정보로 방향 전환',
+          '판정 원칙: 채택 기준을 결과 전에 기록, 검증 2023·2024 **두 해 모두** 좋아질 때만 채택',
+          '재현성: 제출마다 커밋·명령·환경·파일 해시 기록, PC·VM 간 정산금 원 단위 일치 확인',
+        ],
+        list: true,
+      },
+    ],
+  },
 ];
 
 export const tables = {
@@ -114,5 +114,5 @@ export const tables = {
   ],
   activities: [{ left: 'IBA(Intelligent Business Analytics) 지능형 경영 분석 학회 12기', right: '2026.08 ~' }],
   language: [{ left: 'TOEIC', right: '980/990' }],
-  contests: [{ left: `${contests[0].title} 385팀 중 78위`, right: '2026.11' }],
+  contests: [{ left: 'OIBC 경진대회 385팀 중 78위', right: '2026.11' }],
 };
