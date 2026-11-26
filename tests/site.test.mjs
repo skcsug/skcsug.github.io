@@ -428,7 +428,8 @@ test('Highlights table sits right after the hero and links each project', () => 
   assert.equal(rows.length, 3);
   assert.ok(rows[0].includes('대출 연체 확률 예측 모델과 승인 기준') && rows[1].includes('중고차 가격 예측 모델') && rows[2].includes('OIBC'), 'Highlights should follow page order: 대출 → 중고차 → OIBC');
   const heads = [...table.matchAll(/<th[^>]*>([^<]*)<\/th>/g)].map((m) => m[1].trim());
-  assert.deepEqual(heads, ['프로젝트', '기간', '팀'], 'no result column in Highlights');
+  assert.deepEqual(heads, ['프로젝트', '기간'], 'Highlights shows only project and period');
+  assert.ok(!/팀장/.test(table), 'no team column in Highlights');
   for (const t of ['385팀 중 78위', 'F1 0.6667', 'RMSE −5.3%']) assert.ok(!table.includes(t), `Highlights should not show ${t}`);
   assert.ok(/href="\/credit-demo\/"/.test(table), 'Highlights should link the demo');
   const ids = [...html.matchAll(/<article class="project"[^>]*id="([^"]+)"/g)].map((m) => m[1]);
